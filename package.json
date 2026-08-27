@@ -1,0 +1,15 @@
+{
+  "name": "kaia-lmsr-market-test",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Kaia Kairos 테스트넷 LS-LMSR 마켓 트레이딩 테스트 하네스",
+  "scripts": {
+    "discover": "node test/lmsr/01-discover.js",
+    "fund": "node test/lmsr/02-fund.js",
+    "trade-test": "node test/lmsr/03-trade-test.js",
+    "test:all": "node test/lmsr/02-fund.js && node test/lmsr/03-trade-test.js"
+  },
+  "dependencies": {
+    "ethers": "^6.13.0"
+  }
+}
