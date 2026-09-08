@@ -1,0 +1,95 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>captures</title>
+<style>
+body{margin:0;padding:20px;background:#fff;font-family:"Noto Sans KR",sans-serif}
+.cap{width:1180px;background:#0f172a;color:#e2e8f0;border-radius:10px;padding:18px 22px;margin-bottom:30px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.cap h2{margin:0 0 4px;font-size:18px;color:#fff}
+.cap .src{font-size:12px;color:#94a3b8;margin-bottom:12px;font-family:monospace}
+.mono{font-family:"DejaVu Sans Mono",monospace;font-size:13px;white-space:pre-wrap;line-height:1.45}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border:1px solid #334155;padding:5px 8px;text-align:left;font-family:"DejaVu Sans Mono",monospace}
+th{background:#1e293b;color:#cbd5e1;font-family:"Noto Sans KR",sans-serif}
+.k{color:#7dd3fc}.v{color:#fde68a}.red{color:#fb7185;font-weight:bold}.g{color:#86efac}
+.big{font-size:40px;font-weight:700;letter-spacing:2px}
+.warn{background:#7f1d1d;color:#fecaca;padding:8px 12px;border-radius:6px;font-size:13px;margin-top:10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.stamp{font-size:11px;color:#64748b;margin-top:10px;text-align:right}
+</style></head><body>
+
+<div class="cap" id="cap1">
+<h2>증거 1. 토큰 메타데이터 — "BTC"가 아니라 리수(Lisu) 문자 위조 심볼</h2>
+<div class="src">eth_call → 0x9CfAe85338A8c326d5165Df4a7EC3357e8b78888 (BSC, chainId 56) via bsc-dataseed.binance.org · 2026-09-08 02:41 UTC</div>
+<div class="grid">
+<div class="mono"><span class="k">name()</span>   raw: 0x…<span class="v">ea93906974636f696e</span>
+         decoded: <span class="big">ꓐitcoin</span>
+<span class="k">symbol()</span> raw: 0x…<span class="v">ea9390ea9394ea939a</span>
+         decoded: <span class="big">ꓐꓔꓚ</span>
+<span class="k">decimals()</span>    18
+<span class="k">totalSupply()</span> 1,000,000,000
+<span class="k">owner()</span>       0xe2ce6ab80874fa9fa2aae65d277dd6b8e65c9de0 (컨트랙트, 96.18% 보유)
+<span class="k">eth_getCode</span>   45 bytes = EIP-1167 클론 프록시
+              → impl 0x8b4329947e34b6d56d71a3385cac122bade7d78d</div>
+<div>
+<table><tr><th>표시 글자</th><th>유니코드</th><th>실제 이름</th><th>진짜 글자</th></tr>
+<tr><td class="big" style="font-size:26px">ꓐ</td><td>U+A4D0</td><td>LISU LETTER BA</td><td>B (U+0042)</td></tr>
+<tr><td class="big" style="font-size:26px">ꓔ</td><td>U+A4D4</td><td>LISU LETTER TA</td><td>T (U+0054)</td></tr>
+<tr><td class="big" style="font-size:26px">ꓚ</td><td>U+A4DA</td><td>LISU LETTER CA</td><td>C (U+0043)</td></tr></table>
+<div class="warn">심볼 3글자 모두 라틴 알파벳이 아님. 지갑·탐색기 화면에서는 "BTC"와 구별이 거의 불가능(호모글리프 공격). 실제 BTC(BTCB)는 0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c.</div>
+</div></div>
+<div class="stamp">GoPlus token_security: is_honeypot=0, is_mintable=0, buy/sell tax=0, launchpad=Flap, holder_count=5013 — 컨트랙트 자체는 평범한 ERC-20(OpenZeppelin ERC20Permit+Ownable). 사기는 코드가 아니라 '이름 위조 + 가격 조작'으로 이뤄짐.</div>
+</div>
+
+<div class="cap" id="cap2">
+<h2>증거 2. 가짜 토큰을 진짜 BTC 가격에 맞춘 DEX 풀 (ꓐꓔꓚ / BTCB)</h2>
+<div class="src">GET api.geckoterminal.com/api/v2/networks/bsc/pools/0x62f559f70e131dfa2f971d24c75539cf850b8078944c7552f5e6182bd323831c · 2026-09-08 02:46 UTC</div>
+<div class="grid">
+<div class="mono"><span class="k">name</span>                  ꓐꓔꓚ / BTCB 0.205%
+<span class="k">dex</span>                   pancakeswap-infinity-clmm
+<span class="k">pool_created_at</span>       2026-08-28T14:37:13Z
+<span class="k">base_token_price_usd</span>  <span class="red">$79,511.39</span>   ← 가짜 토큰 1개 가격
+<span class="k">quote_token_price_usd</span> $79,525.87   ← 진짜 BTCB 가격
+<span class="k">base/quote ratio</span>      0.99942 (≈ 1:1 고정)
+<span class="k">reserve_in_usd</span>        <span class="red">$19.72</span>       ← 풀 전체 유동성
+<span class="k">fdv_usd</span>               $79,511,390,467,657 (79조 달러, 허구)
+<span class="k">transactions.h24</span>      buys 0 / sells 0
+
+<span class="g">실제 BTC 시세(CoinGecko, 2026-09-08): $79,142</span></div>
+<div>
+<table><tr><th>날짜(UTC)</th><th>가짜 풀 종가</th><th>실제 BTC 종가</th><th>풀 거래량</th></tr>
+<tr><td>2026-08-28</td><td>77,649</td><td>77,821</td><td>$7,823</td></tr>
+<tr><td>2026-08-29</td><td>78,185</td><td>78,225</td><td>$7,512</td></tr>
+<tr><td>2026-08-30</td><td>78,435</td><td>77,658</td><td>$5,540</td></tr>
+<tr><td>2026-08-31</td><td>78,453</td><td>78,553</td><td>$5,609</td></tr>
+<tr><td>2026-09-01</td><td>77,513</td><td>77,416</td><td>$12,185</td></tr>
+<tr><td>2026-09-02</td><td>77,182</td><td>77,297</td><td>$7,447</td></tr>
+<tr><td>2026-09-03</td><td>81,138</td><td>81,265</td><td>$7,928</td></tr>
+<tr><td>2026-09-04</td><td>79,511</td><td>79,671</td><td>$7,683</td></tr></table>
+<div class="warn">유동성 $19.72짜리 풀에서 매일 수천 달러어치 자전거래로 가격을 BTC 시세에 계속 맞춰 놓음 → 가격 API·지갑 앱이 이 가짜 토큰을 "BTC 시세"로 표시. 같은 토큰의 실제 시장(Flap 런치패드 풀) 가격은 <b>$0.0001177</b>.</div>
+</div></div>
+<div class="stamp">참고: Uniswap V4에도 ꓐꓔꓚ/USDT 풀 2개 존재 (수수료 70%, 80%, 유동성 각 $5.78 / $4.00). 매도 시 대부분이 수수료로 소멸되는 구조.</div>
+</div>
+
+<div class="cap" id="cap3">
+<h2>증거 3. 수신 지갑(0xe2D9…75C7)으로 들어온 가짜 BTC 전송 트랜잭션</h2>
+<div class="src">eth_getTransactionByHash / eth_getTransactionReceipt / balanceOf via bsc-dataseed.binance.org · eth_getLogs via rpc-bsc.48.club</div>
+<div class="grid">
+<div class="mono"><span class="k">tx hash</span>   0xc6472b66092150e26d35968c558b4f6611fb35100130c4996971eca26d92a947
+<span class="k">block</span>     119,505,519
+<span class="k">time</span>      2026-09-02 08:44:57 UTC  (<span class="v">2026-09-02 17:44:57 KST</span>)
+<span class="k">from</span>      0x580e4dd7a793df8e850575e1881cf5a67effccb5
+<span class="k">to</span>        0x9cfae85338a8c326d5165df4a7ec3357e8b78888 (토큰 컨트랙트)
+<span class="k">method</span>    0xa9059cbb transfer(address,uint256)
+<span class="k">Transfer</span>  0x580e4dd7… → 0xe2d93a68…  <span class="v">645.9727531698692 ꓐꓔꓚ</span>
+<span class="k">status</span>    0x1 (성공)   gasUsed 60,510</div>
+<div>
+<table><tr><th>항목</th><th>값</th></tr>
+<tr><td>수신 지갑 잔고(balanceOf)</td><td>645.9727531698692 ꓐꓔꓚ</td></tr>
+<tr><td>가짜 풀 가격 기준 '표시 가치'</td><td class="red">≈ $51,364,000 (645.97 × $79,511)</td></tr>
+<tr><td>실제 시장 가격 기준 가치</td><td class="g">≈ $0.08 (645.97 × $0.0001177)</td></tr>
+<tr><td>수신 지갑 BNB 잔고 / 거래수</td><td>0.00082 BNB / 23 tx</td></tr>
+<tr><td>발신 지갑 0x580e… 가짜BTC 잔고</td><td>119,157.35 ꓐꓔꓚ (표시가치 ≈ $94.7억)</td></tr>
+<tr><td>발신 지갑 BNB 잔고 / 거래수</td><td>0 BNB / 17 tx</td></tr>
+<tr><td>토큰 생성자(GoPlus creator_address)</td><td>0x4d3437872c8c45ca3c299db1337b5bc6581b7503 (101,767 tx, 0.68 BNB)</td></tr></table>
+</div></div>
+<div class="stamp">진짜 BTCB 전송이라면 컨트랙트 주소가 0x7130d2A1…Ead9c 여야 함. 이 전송의 토큰 컨트랙트는 0x9CfAe853…8888 → 가짜.</div>
+</div>
+</body></html>
