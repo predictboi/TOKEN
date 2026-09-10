@@ -257,3 +257,20 @@ Anchor 0.31+, Solana CLI v3, create-solana-dapp `nextjs-anchor`, TypeScript, Hel
 2. 부분 파기(예: 트레저리 상한 소폭 초과)를 전액 슬래시로 볼지 가중치를 둘지. v1은 전액.
 3. 6개월 후 "운영 약속"(월 온체인 매출 ≥ X 등)으로 확장할지, 런치 약속만 반복할지.
 4. 첫 통합 런치패드 후보: MetaDAO(큐레이션, USDC 조달, 신뢰 서사 일치), Meteora DBC(퍼미션리스, 물량), Believe.
+
+---
+
+## 부록 A. Sanctum·리스테이킹 접목 (2026-09-10)
+
+용어 정리: Sanctum은 리퀴드 스테이킹(LST) 인프라다. Infinity(다중 LST 풀, INF), Creator LST(프로젝트별 브랜드 LST 발행), Router, Reserve. Solana의 리스테이킹은 Jito Restaking(VRT, Fragmetric 등)과 Solayer다.
+
+| # | 방안 | 시점 | 코드 영향 |
+|---|---|---|---|
+| 1 | 본드를 USDC 대신 INF(또는 Sanctum LST)로 받음. 본드가 6개월간 스테이킹 수익을 냄. 커버리지도 같은 토큰 단위 | 해커톤 | `Launch.bond_mint` 추가, 어떤 SPL 토큰이든 허용. INF는 accreting이라 정산 로직 불변 |
+| 2 | 제3자 인수 자본을 Jito Restaking NCN으로. 약속 파기 = 슬래싱 조건, 보험료 = 리스테이킹 보상 | v2 로드맵 | 없음 (덱 슬라이드) |
+| 3 | Creator LST 발행사를 두 번째 고객군으로. 약속 = 커미션 상한, 딜린퀀시 없음, 스테이크풀 권한 불변 | 파트너십 논의 | 약속 타입 3종 추가 |
+| 4 | 파운더에게 요청: INF 본드 채택 확인, 10월 런치 예정 Creator LST 팀 2~3곳 소개, 덱 코멘트 | 이번 주 | 없음 |
+
+방안 1의 효과: 본드 50,000 USD 상당, 연 6.4% 기준 6개월 약 1,600 USD가 팀에게 추가로 간다. v1의 Meteora LP 운용을 뺀 이유(비영구 손실)가 LST에서는 발생하지 않는다. v1은 스테이킹 수익 전부를 팀에게 주고, 프로토콜 몫(수익원 5)은 v2에서 결정한다.
+
+주의: 본드가 LST면 SOL 하락 시 보호의 달러 가치도 함께 떨어진다. 상세 화면에 "이 보호는 SOL 기준" 문구 필수.
