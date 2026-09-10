@@ -1,0 +1,476 @@
+<title>본드 런치 개발자 인계서</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Noto+Sans+KR:wght@400;500&display=swap">
+<style>
+  :root {
+    --primary: #181d26; --primary-active: #0d1218; --ink: #181d26; --body: #333840; --muted: #41454d;
+    --hairline: #dddddd; --border-strong: #9297a0; --canvas: #ffffff; --surface-soft: #f8fafc; --surface-strong: #e0e2e6;
+    --surface-dark: #181d26; --coral: #aa2d00; --forest: #0a2e0e; --cream: #f5e9d4; --peach: #fcab79; --mint: #a8d8c4;
+    --yellow: #f4d35e; --mustard: #d9a441; --on-dark: #ffffff; --link: #1b61c9; --link-active: #1a3866;
+    --r-sm: 6px; --r-md: 10px; --r-lg: 12px;
+    --font: "Inter", "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { background: var(--canvas); color: var(--body); font-family: var(--font); font-size: 14px; line-height: 1.5; word-break: keep-all; -webkit-font-smoothing: antialiased; }
+  a { color: var(--link); text-decoration: none; }
+  a:active { color: var(--link-active); }
+  a:focus-visible { outline: 2px solid #458fff; outline-offset: 2px; }
+  .nav { height: 64px; border-bottom: 1px solid var(--hairline); background: var(--canvas); position: sticky; top: 0; z-index: 5; }
+  .nav .in { max-width: 1280px; margin: 0 auto; padding: 0 48px; height: 100%; display: flex; align-items: center; gap: 32px; }
+  .nav .mark { color: var(--ink); font-weight: 500; font-size: 16px; }
+  .nav .menu { display: flex; gap: 20px; }
+  .nav .menu a { color: var(--ink); font-size: 14px; }
+  .nav .right { margin-left: auto; display: flex; gap: 12px; align-items: center; }
+  .btn-primary { display: inline-block; background: var(--primary); color: #fff; font-size: 16px; font-weight: 500; line-height: 1.4; padding: 12px 20px; border-radius: var(--r-lg); }
+  .btn-primary:active { background: var(--primary-active); }
+  .btn-secondary { display: inline-block; background: var(--canvas); color: var(--ink); font-size: 16px; font-weight: 500; line-height: 1.4; padding: 12px 20px; border-radius: var(--r-lg); border: 1px solid var(--hairline); }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+  .band { padding: 96px 0; }
+  .band.tight { padding: 64px 0; }
+  .hero h1 { font-size: 40px; font-weight: 400; line-height: 1.2; color: var(--ink); margin: 0 0 24px; max-width: 22ch; text-wrap: balance; }
+  .hero p { font-size: 16px; color: var(--body); max-width: 60ch; margin: 0 0 32px; line-height: 1.5; }
+  .hero .meta { font-size: 14px; font-weight: 500; letter-spacing: .16px; color: var(--muted); margin-bottom: 24px; }
+  .cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  h2 { font-size: 32px; font-weight: 400; line-height: 1.2; color: var(--ink); margin: 0 0 16px; text-wrap: balance; }
+  h3 { font-size: 20px; font-weight: 400; line-height: 1.5; color: var(--ink); margin: 40px 0 12px; }
+  h4 { font-size: 16px; font-weight: 500; color: var(--ink); margin: 24px 0 8px; }
+  .lead { font-size: 16px; max-width: 64ch; color: var(--body); margin: 0 0 32px; }
+  p { max-width: 72ch; margin: 0 0 12px; }
+  ul, ol { max-width: 72ch; padding-left: 20px; margin: 0 0 12px; }
+  li { margin-bottom: 6px; }
+  .sig { border-radius: var(--r-lg); padding: 48px; color: var(--on-dark); }
+  .sig.coral { background: var(--coral); }
+  .sig.forest { background: var(--forest); }
+  .sig.dark { background: var(--surface-dark); }
+  .sig h2 { color: #fff; margin-bottom: 20px; }
+  .sig p { color: #fff; opacity: .92; font-size: 16px; max-width: 64ch; }
+  .sig .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-top: 32px; }
+  .sig .cols h4 { color: #fff; margin: 0 0 6px; }
+  .sig .cols p { font-size: 14px; margin: 0; opacity: .88; }
+  .cream { background: var(--cream); border-radius: var(--r-md); padding: 24px; color: var(--ink); }
+  .cream h2 { margin-bottom: 12px; }
+  .soft { background: var(--surface-soft); border-radius: var(--r-lg); padding: 32px; }
+  .strong { background: var(--surface-strong); border-radius: var(--r-lg); padding: 48px; }
+  .grid { display: grid; gap: 24px; }
+  .grid.c2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid.c3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid.c4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .demo { border-radius: var(--r-md); padding: 24px; color: var(--ink); display: flex; flex-direction: column; gap: 10px; }
+  .demo .k { font-size: 16px; font-weight: 500; }
+  .demo .big { font-size: 32px; font-weight: 400; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .demo p { font-size: 14px; margin: 0; }
+  .demo .tag { font-size: 13px; font-weight: 500; letter-spacing: .16px; opacity: .8; }
+  .demo.peach { background: var(--peach); }
+  .demo.mint { background: var(--mint); }
+  .demo.yellow { background: var(--yellow); }
+  .demo.creamy { background: var(--cream); }
+  .demo.tall { min-height: 260px; }
+  .card { background: var(--canvas); border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 16px; }
+  .card .t { font-size: 18px; font-weight: 500; color: var(--ink); margin: 0 0 8px; }
+  .card p { margin: 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+  th { color: var(--muted); font-weight: 500; font-size: 14px; letter-spacing: .16px; }
+  tr:last-child td { border-bottom: 0; }
+  .tw { overflow-x: auto; margin: 12px 0 24px; }
+  .tw table { min-width: 600px; }
+  code { font-family: var(--mono); font-size: 13px; color: var(--ink); background: var(--surface-soft); border: 1px solid var(--hairline); padding: 1px 6px; border-radius: var(--r-sm); }
+  pre { background: var(--surface-soft); border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 16px; font-family: var(--mono); font-size: 13px; line-height: 1.5; overflow-x: auto; margin: 12px 0 24px; color: var(--ink); max-width: 84ch; }
+  pre code { border: 0; background: none; padding: 0; font-size: inherit; }
+  .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .rail { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 48px; align-items: start; }
+  .rail nav { position: sticky; top: 88px; font-size: 14px; display: flex; flex-direction: column; gap: 6px; }
+  .rail nav a { color: var(--body); padding: 4px 0; }
+  .rail nav .h { font-weight: 500; color: var(--ink); margin: 8px 0 4px; }
+  .steps { counter-reset: s; list-style: none; padding: 0; max-width: 72ch; }
+  .steps li { counter-increment: s; display: grid; grid-template-columns: 40px 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--hairline); }
+  .steps li::before { content: counter(s); width: 40px; height: 40px; border-radius: 9999px; border: 1px solid var(--hairline); display: flex; align-items: center; justify-content: center; color: var(--ink); font-weight: 500; }
+  .footer { border-top: 1px solid var(--hairline); padding: 64px 0; color: var(--body); font-size: 14px; }
+  .footer .in { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  @media (max-width: 1024px) { .grid.c4 { grid-template-columns: repeat(2, 1fr); } .grid.c3 { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px) {
+    .wrap, .nav .in { padding: 0 20px; }
+    .band { padding: 56px 0; }
+    .hero h1 { font-size: 30px; } h2 { font-size: 26px; }
+    .grid.c2, .grid.c3, .grid.c4 { grid-template-columns: 1fr; }
+    .sig { padding: 28px; }
+    .rail { grid-template-columns: 1fr; gap: 20px; } .rail nav { position: static; flex-direction: row; flex-wrap: wrap; gap: 4px 14px; } .rail nav .h { width: 100%; }
+    .nav .menu { display: none; }
+  }
+</style>
+
+<div class="nav"><div class="in">
+  <span class="mark">개발자 인계서</span>
+  <div class="menu">
+    <a href="#revenue">수익 구조</a><a href="#system">시스템</a><a href="#program">온체인</a><a href="#indexer">인덱서</a><a href="#front">프론트</a><a href="#tests">테스트</a><a href="#plan">일정</a>
+  </div>
+  <div class="right">
+    <a class="btn-secondary" href="https://github.com/predictboi/TOKEN/blob/claude/solana-colosseum-hackathon-yezkp4/docs/project-spec.md">스펙 v2</a>
+    <a class="btn-primary" href="https://github.com/predictboi/TOKEN/blob/claude/solana-colosseum-hackathon-yezkp4/docs/dev-handoff.md">원본 문서</a>
+  </div>
+</div></div>
+
+<!-- HERO: white canvas -->
+<section class="band hero"><div class="wrap">
+  <div class="meta">Developer handoff · 2026-09-10 · Spec v2 기준</div>
+  <h1>본드 런치 약속 시장, 개발자 인계서</h1>
+  <p>수익원마다 그것을 걷는 코드가 어디에 있어야 하는지, 각 구성요소가 Web2의 무엇에 해당하는지, 데이터 모델과 수식과 테스트와 완료 조건까지 한 문서에 담았습니다. 수치와 규칙이 스펙과 충돌하면 이 문서가 우선합니다.</p>
+  <div class="cta-row">
+    <a class="btn-primary" href="#program">온체인 프로그램부터 읽기</a>
+    <a class="btn-secondary" href="#revenue">수익 구조부터 읽기</a>
+  </div>
+</div></section>
+
+<!-- CORAL signature: the thesis -->
+<section class="band" style="padding-top:0"><div class="wrap">
+  <div class="sig coral">
+    <h2>토큰을 런치한 팀이 "러그 안 친다"는 약속 5가지에 자기 돈을 걸고, 홀더는 그 약속이 깨질 때 보상받는 보호를 산다.</h2>
+    <p>보호 가격은 수요에 따라 자동으로 오르내리고, 6개월 동안 약속을 지킨 기록이 신용등급이 된다.</p>
+    <div class="cols">
+      <div><h4>Web2로 한 줄</h4><p>마켓플레이스 위에 붙는 에스크로 + 보증보험 모듈. 보험료는 서지 프라이싱, 이력은 신용점수.</p></div>
+      <div><h4>우리가 아닌 것</h4><p>런치패드가 아니다. 어디서 런치했든, 이미 런치된 토큰이든 위에 붙는 레이어다.</p></div>
+      <div><h4>핵심 설계</h4><p>보험사가 없다. 팀이 건 본드가 곧 지급 준비금이다. 그래서 2면 시장이고 콜드 스타트가 한 번이다.</p></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- WHITE: Web2 mapping -->
+<section class="band" style="padding-top:0"><div class="wrap">
+  <h2>우리 것과 Web2에 이미 있는 것</h2>
+  <p class="lead">처음 보는 개발자가 각 부품을 30초 안에 자리매김하도록 대응표를 먼저 둡니다.</p>
+  <div class="tw"><table>
+    <thead><tr><th>우리 것</th><th>Web2에서 이미 있는 것</th></tr></thead>
+    <tbody>
+      <tr><td>팀이 거는 본드</td><td>건설사 계약이행 보증금, Airbnb 호스트 보증금</td></tr>
+      <tr><td>홀더가 사는 보호</td><td>전세보증보험(HUG), 쿠팡 안심케어</td></tr>
+      <tr><td>보험료율이 수요로 움직임</td><td>Uber 서지 프라이싱, 항공권 다이내믹 프라이싱</td></tr>
+      <tr><td>약속 5가지</td><td>GitHub 브랜치 보호 규칙. 사람이 아니라 시스템이 강제</td></tr>
+      <tr><td>스냅샷</td><td>렌터카 인수 시 찍는 차량 상태 사진</td></tr>
+      <tr><td>크랭커</td><td>아무나 실행할 수 있는 공개 cron job</td></tr>
+      <tr><td>등급 계정</td><td>NICE·KCB 신용점수</td></tr>
+      <tr><td>배지 SVG</td><td>Trustpilot 별점 위젯, 네이버 안심가게 배지</td></tr>
+      <tr><td>등급 API</td><td>신용조회 API(NICE 평가정보 B2B)</td></tr>
+      <tr><td>런치패드</td><td>스마트스토어·쿠팡 마켓플레이스. 우리는 그 위의 안전결제 모듈</td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+
+<!-- WHITE: revenue as demo-grid cards (peach/mint/yellow/cream), uneven -->
+<section class="band" id="revenue" style="padding-top:0"><div class="wrap">
+  <h2>수익 구조와 그것을 걷는 코드</h2>
+  <p class="lead">수익원마다 "돈이 실제로 우리 계좌에 들어오려면 코드 어디에 무엇이 있어야 하는가"를 적었습니다. 등록 수수료는 받지 않습니다. 팀은 돈을 내는 게 아니라 겁니다.</p>
+  <div class="grid c4">
+    <div class="demo peach tall">
+      <span class="tag">수익원 1 · Take rate</span>
+      <span class="k">보험료 수수료</span>
+      <span class="big">10%</span>
+      <p>홀더가 낸 보험료의 10%. Airbnb 서비스 수수료와 같은 자리.</p>
+      <p><strong>발생</strong> <code>buy_coverage</code> 실행 순간. 정산을 기다리지 않는다.</p>
+      <p><strong>개발</strong> Protocol에 <code>premium_fee_bps</code>와 <code>fee_vault</code>. buy_coverage 안에서 10%는 fee_vault, 90%는 bond_vault로 두 갈래 전송. admin 전용 <code>withdraw_fees</code>. 인덱서에 일별 수수료 테이블.</p>
+    </div>
+    <div class="demo mint">
+      <span class="tag">수익원 2 · Settlement fee</span>
+      <span class="k">슬래시 수수료</span>
+      <span class="big">10%</span>
+      <p>파기 시 커버리지 지급 후 남은 본드의 10%. PayPal 분쟁 처리 수수료.</p>
+      <p><strong>개발</strong> <code>resolve_epoch</code>의 Breached 분기에서 remaining × 10%를 fee_vault로. 나머지 90%의 배분 비율을 Epoch에 기록하고 <code>claim</code>이 그 비율로 지급.</p>
+      <p><strong>순서</strong> 커버리지 지급이 먼저, 수수료가 다음. 바뀌면 홀더 보상이 줄어 신뢰가 깨진다.</p>
+    </div>
+    <div class="demo yellow">
+      <span class="tag">수익원 3 · Partner fee</span>
+      <span class="k">런치패드 통합</span>
+      <span class="big">0.5%</span>
+      <p>런치패드 경유 등록 시 본드의 0.5% 또는 월정액. 토스페이먼츠가 카페24에 붙는 구조.</p>
+      <p><strong>개발</strong> Launch에 <code>partner</code> 필드, register_launch에 <code>partner_code</code> 인자. 화이트리스트와 분배율은 v2. 필드만 미리 넣으면 마이그레이션이 없다.</p>
+    </div>
+    <div class="demo creamy tall">
+      <span class="tag">수익원 4 · Data licensing</span>
+      <span class="k">등급 API 구독</span>
+      <span class="big">월정액</span>
+      <p>NICE가 은행에 신용조회 건당 과금하는 것과 같다. 6개월 이력이 쌓인 뒤 렌딩·지갑·애그리게이터 대상.</p>
+      <p><strong>v1</strong> 공개 엔드포인트 3개와 배지 SVG, 인증 없음.</p>
+      <p><strong>v2</strong> API 키, 키별 rate limit, 사용량 집계, 무료 티어(배지)와 유료 티어(전체 이력) 분리.</p>
+      <p>원천 데이터는 전부 온체인에 있다. 우리가 파는 것은 편의와 SLA이지 독점 데이터가 아니다.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- CREAM callout: money flow -->
+<section class="band" style="padding-top:0"><div class="wrap">
+  <div class="cream">
+    <h2>수익 흐름 한눈에</h2>
+    <pre style="background:#fff;border-color:#e8dcc2;margin-bottom:0"><code>홀더 → buy_coverage → 보험료 100
+                         ├─ 10 → fee_vault            (수익원 1)
+                         └─ 90 → bond_vault           (팀 적립)
+
+Breach → resolve_epoch → bond_vault 잔액
+                         ├─ coverage_sold → 홀더      (claim)
+                         └─ 나머지 R
+                              ├─ R×10% → fee_vault    (수익원 2)
+                              └─ R×90% → 홀더         (claim, pro-rata)
+
+파트너 경유 register_launch → 본드 × 0.5%
+                         ├─ 파트너 몫 → 파트너 지갑
+                         └─ 우리 몫  → fee_vault      (수익원 3)</code></pre>
+  </div>
+</div></section>
+
+<!-- WHITE: system components -->
+<section class="band" id="system" style="padding-top:0"><div class="wrap">
+  <h2>시스템 구성</h2>
+  <p class="lead">온체인 프로그램이 핵심이고 나머지는 그것을 보여주고 유통하는 도구입니다.</p>
+  <div class="grid c4">
+    <div class="card"><p class="t">온체인 프로그램</p><p>Anchor / Rust. 백엔드 + DB + 결제 처리기. 단, 코드가 공개되고 누구나 호출한다.</p><p style="margin-top:8px;color:var(--muted)">개발 비중 55%</p></div>
+    <div class="card"><p class="t">인덱서 + API</p><p>TS / Node. 읽기 리플리카 + 배치 ETL + 공개 REST.</p><p style="margin-top:8px;color:var(--muted)">15%</p></div>
+    <div class="card"><p class="t">프론트 + 위젯</p><p>Next.js. 쇼핑몰 프론트 + 임베드 위젯. 지갑 연결이 로그인, 서명이 결제 확인.</p><p style="margin-top:8px;color:var(--muted)">25%</p></div>
+    <div class="card"><p class="t">크랭커</p><p>TS 스크립트. 월말 정산 cron. 우리도 돌리고 남도 돌릴 수 있다.</p><p style="margin-top:8px;color:var(--muted)">5%</p></div>
+  </div>
+</div></section>
+
+<!-- DARK navy: three things that differ from a backend -->
+<section class="band" style="padding-top:0"><div class="wrap">
+  <div class="sig dark">
+    <h2>온체인 프로그램을 백엔드에 빗대되, 세 가지가 다르다</h2>
+    <div class="cols">
+      <div><h4>인증이 서명이다</h4><p>함수 호출마다 호출자가 지갑으로 서명한다. 세션도 JWT도 없다. "관리자만"은 코드 안에서 서명자를 검사해야 한다.</p></div>
+      <div><h4>행 생성에 보증금이 든다</h4><p>DB 행(계정)을 만들 때 rent를 호출자가 낸다. 스토리지 요금을 선납하는 셈이다.</p></div>
+      <div><h4>클라이언트를 믿지 않는다</h4><p>코드가 배포되면 누구나 읽고 호출한다. 전달된 계정 주소는 등록된 주소와 반드시 대조한다. "user_id를 세션에서 꺼내라"와 같은 원칙이다.</p></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- WHITE with left rail: program detail -->
+<section class="band" id="program" style="padding-top:0"><div class="wrap rail">
+  <nav>
+    <div class="h">온체인 프로그램</div>
+    <a href="#accounts">데이터 모델</a><a href="#ix">인스트럭션</a><a href="#covenants">약속 5종 검증</a><a href="#pricing">가격 공식</a><a href="#settle">정산 공식</a><a href="#state">상태 머신</a><a href="#errors">에러 케이스</a>
+  </nav>
+  <div>
+    <h2>온체인 프로그램 상세</h2>
+    <p class="lead">PDA는 "시드로 결정되는 기본키"입니다. Launch의 키가 토큰 민트이므로 한 토큰당 런치 하나가 보장됩니다.</p>
+
+    <h3 id="accounts">데이터 모델 (계정 = 테이블 행)</h3>
+    <h4>Protocol · 싱글턴 · 설정 테이블 + 관리자</h4>
+    <div class="tw"><table><thead><tr><th>필드</th><th>타입</th><th>설명</th></tr></thead><tbody>
+      <tr><td>admin</td><td>Pubkey</td><td>수수료 출금·파라미터 변경 권한</td></tr>
+      <tr><td>fee_vault</td><td>Pubkey</td><td>수수료 USDC 토큰 계정</td></tr>
+      <tr><td>premium_fee_bps / slash_fee_bps / partner_fee_bps</td><td>u16</td><td class="num">1000 / 1000 / 50</td></tr>
+      <tr><td>r_min_bps / r_max_bps</td><td>u16</td><td class="num">50 / 1500 (월 0.5% / 15%)</td></tr>
+      <tr><td>epoch_slots</td><td>u64</td><td>30일 ≈ 6,480,000. 데모 1,500(약 10분)</td></tr>
+      <tr><td>total_epochs</td><td>u8</td><td class="num">6</td></tr>
+      <tr><td>min_bond</td><td>u64</td><td>최소 본드 (USDC 6 decimals)</td></tr>
+    </tbody></table></div>
+    <h4>Launch · 시드 ["launch", mint] · 가맹점 계정 + 보증금 잔액 + 신용점수 원천</h4>
+    <div class="tw"><table><thead><tr><th>필드</th><th>타입</th><th>설명</th></tr></thead><tbody>
+      <tr><td>team</td><td>Pubkey</td><td>팀 지갑. 본드 회수 권한</td></tr>
+      <tr><td>mint</td><td>Pubkey</td><td>토큰 민트</td></tr>
+      <tr><td>partner</td><td>Option&lt;Pubkey&gt;</td><td>런치패드 (수익원 3)</td></tr>
+      <tr><td>bond_vault / bond_balance</td><td>Pubkey / u64</td><td>본드 USDC 계정(프로그램이 authority) / 본드 + 적립 보험료</td></tr>
+      <tr><td>covenants</td><td>CovenantSet</td><td>5종 활성 플래그 + 파라미터</td></tr>
+      <tr><td>current_epoch / status</td><td>u8 / enum</td><td>0..6 / Active · Completed · Breached</td></tr>
+      <tr><td>passed_epochs / rate_sum_bps / active_covenant_count</td><td>u8 / u32 / u8</td><td>등급 입력 1 · 2 · 3</td></tr>
+      <tr><td>breached_at_epoch</td><td>Option&lt;u8&gt;</td><td>파기 에포크</td></tr>
+    </tbody></table></div>
+    <h4>Epoch · 시드 ["epoch", launch, index] · 월별 보험 계약 + 인수 사진</h4>
+    <div class="tw"><table><thead><tr><th>필드</th><th>타입</th><th>설명</th></tr></thead><tbody>
+      <tr><td>start_slot / end_slot</td><td>u64</td><td></td></tr>
+      <tr><td>snapshot</td><td>Snapshot</td><td>약속 5종 기준값</td></tr>
+      <tr><td>coverage_sold / premium_collected</td><td>u64</td><td>팔린 커버리지 합계 / 보험료 합계</td></tr>
+      <tr><td>result</td><td>enum</td><td>Open · Passed · Breached</td></tr>
+      <tr><td>payout_per_unit</td><td>u64</td><td>Breached 시 커버리지 1당 지급액 (1e6 스케일)</td></tr>
+      <tr><td>closing_rate_bps</td><td>u16</td><td>마감 시점 r. 등급용</td></tr>
+    </tbody></table></div>
+    <h4>Coverage · 시드 ["coverage", epoch, buyer] · 보험 증권</h4>
+    <p>amount, premium_paid, claimed. 같은 사람이 같은 에포크에 두 번 사면 누적한다. 증권을 여러 장 발급하지 않는다.</p>
+
+    <h3 id="ix">인스트럭션 (= API 엔드포인트)</h3>
+    <div class="tw"><table><thead><tr><th>#</th><th>인스트럭션</th><th>서명자</th><th>전제 조건</th><th>하는 일</th><th>Web2</th></tr></thead><tbody>
+      <tr><td>0</td><td><code>initialize_protocol</code></td><td>admin</td><td>1회</td><td>Protocol 생성, 파라미터</td><td>초기 설정</td></tr>
+      <tr><td>1</td><td><code>register_launch</code></td><td>team</td><td>mint당 1회, bond ≥ min_bond</td><td>Launch 생성, 본드 전송, 파트너 수수료 분리, Epoch 0 + 스냅샷</td><td>가맹점 가입 + 보증금</td></tr>
+      <tr><td>2</td><td><code>open_epoch</code></td><td>누구나</td><td>이전 Epoch Passed, current &lt; total</td><td>새 Epoch + 스냅샷</td><td>계약 갱신</td></tr>
+      <tr><td>3</td><td><code>buy_coverage</code></td><td>buyer</td><td>Open, slot &lt; end, sold + amount ≤ bond</td><td>r 계산, 보험료 징수(10/90 분리), Coverage 생성/누적</td><td>보험 가입 + 결제</td></tr>
+      <tr><td>4</td><td><code>resolve_epoch</code></td><td>누구나</td><td>Open, slot ≥ end</td><td>약속 5종 검증 → Passed / Breached. Breached면 payout_per_unit, 슬래시 수수료</td><td>월말 정산 배치</td></tr>
+      <tr><td>5</td><td><code>claim</code></td><td>buyer</td><td>Breached, claimed == false</td><td>amount × payout_per_unit 지급</td><td>보험금 청구</td></tr>
+      <tr><td>6</td><td><code>withdraw_bond</code></td><td>team</td><td>Completed</td><td>bond_balance 전액 팀에게</td><td>보증금 반환</td></tr>
+      <tr><td>7</td><td><code>withdraw_fees</code></td><td>admin</td><td></td><td>fee_vault → admin 계좌</td><td>정산 출금</td></tr>
+    </tbody></table></div>
+    <p>권한 검사는 전부 코드 안에서 합니다. Web2의 <code>requireRole('admin')</code>에 해당하는 것이 Anchor의 <code>has_one = admin</code> 제약입니다.</p>
+  </div>
+</div></section>
+
+<!-- FOREST signature: covenants -->
+<section class="band" id="covenants" style="padding-top:0"><div class="wrap">
+  <div class="sig forest">
+    <h2>약속 5종 검증. 규칙을 켜두면 사람이 감시하지 않아도 시스템이 판정한다.</h2>
+    <p>GitHub 브랜치 보호 규칙과 같다. 차이는 막는 게 아니라 위반을 사후에 판정하고 돈으로 정산한다는 것이고, 그래서 인수 사진(스냅샷)이 필요하다.</p>
+    <div class="cols">
+      <div><h4>1 · 업그레이드 권한 불변</h4><p>ProgramData.upgrade_authority == 등록 시 expected. 스냅샷 없음.</p></div>
+      <div><h4>2 · 민트 권한 없음</h4><p>Mint.mint_authority == None. 스냅샷 없음.</p></div>
+      <div><h4>3 · 트레저리 유출 상한</h4><p>snapshot − current ≤ max_outflow. 트레저리 토큰 계정.</p></div>
+      <div><h4>4 · 팀 지갑 무매도</h4><p>current ≥ snapshot (unlock_slot 이전). 팀 토큰 계정 ≤ 4개.</p></div>
+      <div><h4>5 · LP 락 유지</h4><p>current ≥ snapshot. LP 토큰 계정.</p></div>
+      <div><h4>구현 규칙</h4><p>활성 약속만 검사. remaining_accounts 인덱스는 플래그 순서로 고정. 전달 계정 주소는 등록 주소와 반드시 대조. 하나라도 위반이면 Breached. unlock_slot이 에포크 중간이면 그 에포크는 검사하지 않는다.</p></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- WHITE: formulas, state machine, errors -->
+<section class="band" style="padding-top:0"><div class="wrap">
+  <div class="grid c2">
+    <div>
+      <h3 id="pricing" style="margin-top:0">가격 공식 (서지 프라이싱)</h3>
+<pre><code>u_bps  = coverage_sold × 10_000 / bond_balance
+r_bps  = r_min + (r_max − r_min) × u_bps² / 10_000²
+premium = amount × r_bps / 10_000
+fee     = premium × premium_fee_bps / 10_000
+to_bond = premium − fee</code></pre>
+      <ul>
+        <li>전부 정수 연산. u_bps²는 u128. 나눗셈은 내림.</li>
+        <li>검증값: u 0.3 → r_bps 180, u 0.8 → 978.</li>
+        <li>구매 직전 u로만 계산한다. "장바구니에 담을 때 가격 고정". 구간 적분은 v2.</li>
+        <li>coverage_sold + amount &gt; bond_balance면 거부. 좌석 초과 판매 금지.</li>
+      </ul>
+    </div>
+    <div>
+      <h3 id="settle" style="margin-top:0">정산 공식</h3>
+      <p><strong>Passed</strong> 돈이 움직이지 않는다. passed_epochs += 1, rate_sum_bps += closing_rate_bps. 6번째면 Completed.</p>
+      <p><strong>Breached</strong></p>
+<pre><code>remaining   = bond_balance − coverage_sold
+slash_fee   = remaining × slash_fee_bps / 10_000
+bonus_pool  = remaining − slash_fee
+payout_per_unit = (coverage_sold + bonus_pool) × 1e6 / coverage_sold
+claim: payout = amount × payout_per_unit / 1e6</code></pre>
+      <p>마지막 청구자의 반올림 오차는 admin이 회수. coverage_sold == 0이면 bonus_pool 전액이 fee_vault로 간다.</p>
+    </div>
+  </div>
+
+  <h3 id="state">상태 머신</h3>
+<pre><code>Launch:  Active ──(6× Passed)──▶ Completed ──(withdraw_bond)──▶ [끝]
+           └──(Breached)──▶ Breached ──(claim ×N)──▶ [끝]
+Epoch:   Open ──(resolve, 전부 통과)──▶ Passed
+           └──(resolve, 하나라도 위반)──▶ Breached</code></pre>
+  <p>주문 상태 "결제완료 → 배송중 → 배송완료 / 환불"과 같다. 역방향 전이는 없다.</p>
+
+  <h3 id="errors">에러 케이스 (반드시 테스트)</h3>
+  <div class="tw"><table><thead><tr><th>코드</th><th>상황</th><th>코드</th><th>상황</th></tr></thead><tbody>
+    <tr><td>BondTooSmall</td><td>bond &lt; min_bond</td><td>TeamCannotBuy</td><td>팀 지갑이 자기 런치 보호 구매</td></tr>
+    <tr><td>LaunchExists</td><td>같은 mint로 두 번 등록</td><td>AccountMismatch</td><td>resolve 전달 계정이 등록 주소와 다름</td></tr>
+    <tr><td>EpochNotOpen</td><td>닫힌 에포크에 구매</td><td>NotBreached</td><td>Passed 에포크에 claim</td></tr>
+    <tr><td>EpochNotEnded</td><td>end_slot 전에 resolve</td><td>AlreadyClaimed</td><td>claim 두 번</td></tr>
+    <tr><td>EpochAlreadyResolved</td><td>resolve 두 번</td><td>LaunchNotCompleted</td><td>6 에포크 전에 withdraw_bond</td></tr>
+    <tr><td>CoverageExceedsBond</td><td>좌석 초과 판매</td><td>Unauthorized</td><td>admin 아닌 자가 withdraw_fees</td></tr>
+  </tbody></table></div>
+</div></section>
+
+<!-- SOFT tabbed-like feature card: indexer + frontend -->
+<section class="band" id="indexer" style="padding-top:0"><div class="wrap">
+  <div class="soft">
+    <div class="grid c2">
+      <div>
+        <h2>인덱서와 등급 API</h2>
+        <p>결제 DB의 읽기 리플리카에서 배치로 집계해 공개 API를 내는 것. 원천은 온체인이고 우리는 편의를 판다.</p>
+        <ol>
+          <li>Helius RPC getProgramAccounts로 Launch, Epoch 폴링(1분). v2에서 웹훅.</li>
+          <li>테이블: launches, epochs, coverages, fees_daily.</li>
+          <li>등급은 조회 시점 계산, 캐시 60초.</li>
+        </ol>
+<pre><code>score = 50 × passed_epochs / 6
+      + 35 × (1 − avg_rate_bps / r_max_bps)
+      + 15 × active_covenant_count / 5
+AAA ≥85 · AA ≥75 · A ≥65 · BBB ≥55 · BB ≥45 · B ≥35 · CCC ≥20 · 파기 = D</code></pre>
+        <div class="tw"><table><thead><tr><th>경로</th><th>응답</th><th>Web2</th></tr></thead><tbody>
+          <tr><td><code>GET /launches</code></td><td>mint, grade, current_rate_bps, bond, utilization, passed</td><td>상품 목록</td></tr>
+          <tr><td><code>GET /launches/:mint</code></td><td>상세 + epochs + covenants + 현재 온체인 값</td><td>상품 상세</td></tr>
+          <tr><td><code>GET /launches/:mint/badge.svg</code></td><td>등급 배지, max-age 300</td><td>Trustpilot 위젯</td></tr>
+          <tr><td><code>GET /fees/daily</code></td><td>수익 대시보드 (admin)</td><td>정산 리포트</td></tr>
+        </tbody></table></div>
+        <p><strong>완료 조건</strong> devnet 런치 3개가 60초 내 갱신. 배지가 GitHub README와 트위터 카드에서 렌더. 온체인과 불일치 시 <code>stale: true</code>.</p>
+      </div>
+      <div id="front">
+        <h2>프론트 4화면과 위젯</h2>
+        <p>결제가 붙은 쇼핑몰 프론트. 지갑 연결이 로그인이고, 트랜잭션 서명이 결제 확인 팝업이다.</p>
+        <div class="tw"><table><thead><tr><th>화면</th><th>보여줄 것</th><th>완료 조건</th></tr></thead><tbody>
+          <tr><td>런치 목록</td><td>등급 배지, r, 본드, 이용률 게이지, 지킨 에포크</td><td>등급순 정렬, 3초 내 로드</td></tr>
+          <tr><td>런치 상세</td><td>약속 5개 기준값 / 현재값 / 상태, 타임라인, 곡선 위 현재 위치</td><td>현재값은 RPC 직접 읽기</td></tr>
+          <tr><td>보호 구매</td><td>금액 → 보험료·파기 시 수령액 미리보기 → 서명</td><td>미리보기가 온체인과 1 단위 이내</td></tr>
+          <tr><td>팀 등록</td><td>mint, program, treasury, team ATAs, LP ATA, 약속 토글, 본드</td><td>잘못된 주소는 서명 전 거부</td></tr>
+          <tr><td>임베드 위젯</td><td>배지 + 보호 구매 버튼, iframe, <code>?partner=</code></td><td>런치패드에 한 줄 삽입</td></tr>
+        </tbody></table></div>
+        <p>지갑은 Phantom, Solflare. priority fee 필수. 에러 코드를 한국어 메시지로 매핑한다.</p>
+        <h4>크랭커</h4>
+        <p>1분마다 end_slot ≤ 현재인 Open 에포크에 resolve_epoch, Passed면 이어서 open_epoch. 계정 목록은 Launch.covenants에서 조립. 멱등성은 온체인의 EpochAlreadyResolved가 보장한다.</p>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- CREAM: tests -->
+<section class="band" id="tests" style="padding-top:0"><div class="wrap">
+  <div class="cream">
+    <h2>테스트 계획</h2>
+    <p>Anchor 테스트(litesvm 또는 bankrun). 두 경로를 끝까지 돌린다.</p>
+    <div class="grid c2" style="margin-top:16px">
+      <div class="card"><p class="t">경로 A · 6개월 전부 Pass</p><ol><li>register(본드 50,000) → 홀더 3명 buy(합 40,000) → 보험료·수수료 검증</li><li>slot 전진 → resolve Passed, passed_epochs = 1</li><li>open_epoch ×5, 각각 Passed</li><li>withdraw_bond = 50,000 + 적립 보험료</li><li>fee_vault = 총 보험료의 10%</li></ol></div>
+      <div class="card"><p class="t">경로 B · 2개월째 트레저리 초과 인출</p><ol><li>경로 A의 1~2</li><li>open_epoch → buy → max_outflow 초과 전송</li><li>resolve Breached, payout_per_unit 검증</li><li>claim ×3 합계 = coverage_sold + bonus_pool (오차 ≤ 3)</li><li>fee_vault 증가분 = remaining × 10%</li><li>withdraw_bond 실패(LaunchNotCompleted)</li></ol></div>
+      <div class="card"><p class="t">경로 C · 에러 12종</p><p>각 에러 코드를 1회씩 유발한다.</p></div>
+      <div class="card"><p class="t">경로 D · 가격 공식 단위값</p><p>u = 0, 0.3, 0.5, 0.8, 1.0에서 r_bps = 50, 180, 412, 978, 1500.</p></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- WHITE: demo + stack + plan -->
+<section class="band" id="plan" style="padding-top:0"><div class="wrap">
+  <div class="grid c2">
+    <div>
+      <h2>데모 3분</h2>
+      <ol class="steps">
+        <li>팀이 devnet에서 토큰 런치 후 본드 5,000 USDC 예치, 약속 5종 켬. 20초</li>
+        <li>지갑 3개가 보호 구매. 곡선 위 점이 오르는 것을 상세에서 보여줌. 30초</li>
+        <li>10분 에포크 종료. 크랭커 로그에 resolve → PASS. 보험료가 본드에 쌓임. 20초</li>
+        <li>2번째 에포크 중 팀이 트레저리 초과 인출. 약속 3이 빨간색으로. 15초</li>
+        <li>resolve → BREACH. 홀더 3개 지갑 잔고 증가, 카드가 D로. 30초</li>
+        <li>6개월 지킨 런치의 AAA 배지와 JSON 응답. 20초</li>
+      </ol>
+    </div>
+    <div>
+      <h2>스택과 4주</h2>
+      <p>Anchor 0.31+, Solana CLI v3, create-solana-dapp nextjs-anchor, Helius devnet RPC, Node 20 + Postgres/SQLite, litesvm 또는 bankrun. USDC는 우리가 만든 devnet 테스트 민트, 주소는 Protocol에 저장.</p>
+      <div class="tw"><table><thead><tr><th>주</th><th>온체인</th><th>인덱서</th><th>프론트</th><th>완료 기준</th></tr></thead><tbody>
+        <tr><td>1</td><td>인스트럭션 0~7, 약속 검증, 테스트 A·B·C·D</td><td>스키마, 폴링</td><td>지갑 연결, 목록 뼈대</td><td>로컬 테스트 전부 통과</td></tr>
+        <tr><td>2</td><td>devnet 배포, 크랭커</td><td>등급 API, 배지</td><td>상세, 보호 구매</td><td>devnet 런치 3개 자동 정산</td></tr>
+        <tr><td>3</td><td>버그, 파트너 필드</td><td>fees/daily</td><td>팀 등록, 위젯</td><td>외부인이 보호 구매 가능</td></tr>
+        <tr><td>4</td><td>동결</td><td>동결</td><td>동결</td><td>영상, 덱, 제출</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- STRONG CTA band: decisions -->
+<section class="band" style="padding-top:0"><div class="wrap">
+  <div class="strong">
+    <h2>개발 시작 전 확정할 다섯 가지</h2>
+    <div class="grid c2" style="margin-top:24px">
+      <div><p><strong>1. min_bond 초기값.</strong> 제안 5,000 USDC.</p><p><strong>2. 약속 4의 팀 지갑 최대 개수.</strong> 제안 4개.</p><p><strong>3. coverage_sold == 0인 Breach.</strong> 잔여 본드를 fee_vault로. 약속을 깬 팀에게 돌려주지 않는다.</p></div>
+      <div><p><strong>4. 데모 에포크 길이.</strong> 제안 1,500 slot.</p><p><strong>5. 파트너 수수료 분배율.</strong> 제안 50 / 50, v2.</p><p style="margin-top:24px"><a class="btn-primary" href="https://github.com/predictboi/TOKEN/pull/3">PR #3에서 논의하기</a></p></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- WHITE: glossary + footer -->
+<section class="band tight" style="padding-top:0"><div class="wrap">
+  <h3 style="margin-top:0">용어 한 줄 사전</h3>
+  <div class="tw"><table><thead><tr><th>용어</th><th>뜻</th><th>Web2</th></tr></thead><tbody>
+    <tr><td>PDA</td><td>시드로 결정되는 계정 주소</td><td>자연키 기반 기본키</td></tr>
+    <tr><td>ATA</td><td>지갑의 특정 토큰 잔고 계정</td><td>통화별 하위 계좌</td></tr>
+    <tr><td>slot</td><td>약 400ms 단위 블록 시간</td><td>서버 타임스탬프</td></tr>
+    <tr><td>bps</td><td>1/10,000</td><td>0.01%</td></tr>
+    <tr><td>CPI</td><td>프로그램이 다른 프로그램 호출</td><td>내부 서비스 간 API 호출</td></tr>
+    <tr><td>rent</td><td>계정 유지 보증금</td><td>스토리지 요금 선납</td></tr>
+    <tr><td>remaining_accounts</td><td>가변 길이 계정 목록</td><td>가변 인자</td></tr>
+  </tbody></table></div>
+</div></section>
+
+<div class="footer"><div class="wrap in">
+  <span>본드 런치 약속 시장 · 개발자 인계서 · 2026-09-10</span>
+  <span><a href="https://github.com/predictboi/TOKEN/blob/claude/solana-colosseum-hackathon-yezkp4/docs/dev-handoff.md">원본 마크다운</a> · <a href="https://github.com/predictboi/TOKEN/blob/claude/solana-colosseum-hackathon-yezkp4/docs/project-spec.md">스펙 v2</a> · <a href="https://github.com/predictboi/TOKEN/blob/claude/solana-colosseum-hackathon-yezkp4/docs/explainer.html">설명서</a></span>
+</div></div>
