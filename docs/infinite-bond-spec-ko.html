@@ -1,0 +1,169 @@
+<title>INFINITE BOND 사양서</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@600&display=swap">
+<style>
+  :root { --ink:#1f2328; --body:#2f353b; --muted:#6a737d; --rule:#d8dde3; --rule-soft:#eceff2; --canvas:#ffffff; --code-bg:#f6f7f9; --link:#1b4f8a; }
+  * { box-sizing:border-box; }
+  body { background:var(--canvas); color:var(--body); font-family:"Noto Sans KR","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased; word-break:keep-all; }
+  a { color:var(--link); text-decoration:none; } a:focus-visible { outline:2px solid var(--link); outline-offset:2px; }
+  .doc { max-width:860px; margin:0 auto; padding:56px 32px 96px; }
+  header { border-bottom:1px solid var(--rule); padding-bottom:20px; margin-bottom:28px; }
+  .kicker { font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+  h1 { font-family:"Noto Serif KR","Source Serif 4",Georgia,serif; font-weight:600; font-size:30px; line-height:1.25; color:var(--ink); margin:0 0 10px; }
+  .meta { font-size:13px; color:var(--muted); display:flex; gap:16px; flex-wrap:wrap; }
+  .toc { border:1px solid var(--rule); border-radius:4px; padding:14px 18px; margin:0 0 36px; font-size:14px; background:var(--code-bg); }
+  .toc .t { font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+  .toc ol { margin:0; padding-left:20px; columns:2; column-gap:24px; } .toc li { margin:2px 0; break-inside:avoid; }
+  h2 { font-family:"Noto Serif KR","Source Serif 4",Georgia,serif; font-weight:600; font-size:22px; line-height:1.3; color:var(--ink); margin:44px 0 12px; padding-top:20px; border-top:1px solid var(--rule); }
+  h2:first-of-type { border-top:0; padding-top:0; margin-top:0; }
+  h3 { font-weight:600; font-size:16px; color:var(--ink); margin:28px 0 8px; }
+  p { margin:0 0 12px; max-width:72ch; } ul, ol { margin:0 0 12px; padding-left:22px; max-width:72ch; } li { margin-bottom:4px; }
+  strong { font-weight:600; color:var(--ink); }
+  .tw { overflow-x:auto; margin:10px 0 20px; }
+  table { border-collapse:collapse; width:100%; font-size:13.5px; min-width:560px; }
+  th, td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--rule-soft); vertical-align:top; }
+  th { font-weight:600; color:var(--ink); border-bottom:1px solid var(--rule); }
+  code { font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:12.5px; background:var(--code-bg); border:1px solid var(--rule-soft); border-radius:3px; padding:1px 5px; color:var(--ink); }
+  pre { font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:12.5px; line-height:1.5; background:var(--code-bg); border:1px solid var(--rule-soft); border-radius:4px; padding:12px 14px; overflow-x:auto; margin:10px 0 20px; color:var(--ink); }
+  footer { border-top:1px solid var(--rule); margin-top:48px; padding-top:16px; font-size:13px; color:var(--muted); }
+  @media (max-width:700px) { .doc { padding:32px 18px 64px; } .toc ol { columns:1; } h1 { font-size:25px; } }
+  @media print { .toc { break-inside:avoid; } h2 { break-after:avoid; } }
+</style>
+<div class="doc">
+  <header>
+    <div class="kicker">제품·엔지니어링 사양서</div>
+    <h1>INFINITE BOND</h1>
+    <div class="meta"><span>버전 3.1.1, 해커톤 빌드 확정본</span><span>2026-09-10</span><span>Colosseum Crypto World&#x27;s Fair, Solana 트랙</span><span>제출 2026-10-12</span></div>
+  </header>
+  <nav class="toc" aria-label="목차"><div class="t">목차</div><ol><li><a href="#s1">1. 요약</a></li><li><a href="#s2">2. 역할과 유인</a></li><li><a href="#s3">3. 메커니즘</a></li><li><a href="#s4">4. 수익 모델</a></li><li><a href="#s5">5. 테스트 계획과 테스트 런</a></li><li><a href="#s6">6. 개발 범위</a></li><li><a href="#s7">7. 파라미터 (확정)</a></li><li><a href="#s8">8. 리스크</a></li><li><a href="#s9">9. Sanctum 트랙</a></li><li><a href="#s10">10. 용어</a></li></ol></nav>
+  <p>버전 3.1.1 (해커톤 빌드 확정본) · 2026-09-10 대상: Colosseum Crypto World's Fair, Solana 트랙 · 제출 2026-10-12 상태: 이 문서는 <code>project-spec.md</code>의 부록 A–C를 대체한다. 숫자가 다르면 이 문서가 우선한다. 영문 원본은 <code>infinite-bond-spec-en.md</code>.</p>
+<h2 id="s1">1. 요약</h2>
+<p>INFINITE BOND는 새로 런치된 Solana 토큰을 위한 약속(covenant) 시장이다. 런치 팀은 온체인 약속 뒤에 INF(Sanctum의 다중 LST 토큰)로 본드를 건다. 토큰 홀더는 약속 파기에 대비한 보호를 사거나, 본드 옆에 INF를 예치해 팀을 후원(backing)한다. 30일마다 프로그램이 온체인 계정을 직접 읽어 약속을 검사하고 정산한다. 통과하면 보험료와 스테이킹 수익이 팀과 후원자에게 흐르고, 파기되면 팀의 본드가 먼저 소진되어 보호 구매자에게 지급되며, 그 뒤에야 후원자가 부족분을 떠안는다. 여섯 에포크를 깨끗이 지나면 런치패드·지갑·렌딩이 읽을 수 있는 온체인 등급 계정이 남는다.</p>
+<p>시장이 작동하는 세 가지 성질:</p>
+<ul><li><strong>팀이 가장 먼저 잃는다.</strong> 후원자는 팀 본드보다 선순위이므로, 후원은 팀 자본이 방패가 되는 수익 포지션이다. 후순위 본드를 건다는 것 자체가 신호다.</li><li><strong>보호는 보유와 묶인다.</strong> 커버리지는 구매자의 토큰 잔고까지만 살 수 있고 정산 시점에 잔고가 남아 있어야 지급된다. 팔면 보호가 사라지므로 팀의 초기 매도 압력이 줄어든다.</li><li><strong>본드가 잠긴 동안 수익을 낸다.</strong> INF는 Sanctum 스테이킹 수익(작성 시점 연 약 6.4%)이 붙으므로 본드는 죽은 자본이 아니라 생산적 자산이다.</li></ul>
+<p>오라클, 인덱서, 투표가 결과를 정하지 않는다. 모든 약속은 프로그램 안에서 관련 계정을 읽어 검사한다.</p>
+<h2 id="s2">2. 역할과 유인</h2>
+<div class="tw"><table><thead><tr><th>역할</th><th>하는 일</th><th>얻는 것</th><th>지는 위험</th></tr></thead><tbody><tr><td>팀 (발행자)</td><td>등록 조건 통과, 약속과 파라미터 선택, INF 본드 예치, 선택적으로 무료 보호 스폰서</td><td>등급 계정, 초기 매도 압력 감소, 보험료(90% 중 자기 몫), 본드의 INF 스테이킹 수익, 후원자를 통한 커뮤니티 자본</td><td>파기 시 적립 보험료와 수익을 포함한 본드 전액</td></tr><tr><td>후원자 (홀더, Pass 측)</td><td>상한까지 팀 본드 옆에 INF 예치</td><td>보험료와 INF 수익의 비율 분배, 팀 본드보다 선순위</td><td>팀 본드가 소진된 뒤의 부족분만</td></tr><tr><td>보호 구매자 (홀더, Default 측)</td><td>이용률로 가격이 정해지는 커버리지를 보유량 한도 안에서 구매, 스폰서 보호는 무료로 수령</td><td>파기 시 커버리지 전액 + 팀 잔여 본드의 배분. 지급 ÷ 보험료는 구매 시점 요율에 따라 7배~200배 (§3.9)</td><td>낸 보험료. 토큰을 팔면 보호 소멸</td></tr><tr><td>크랭커</td><td>에포크 종료 후 <code>resolve_epoch</code>, <code>open_epoch</code> 호출</td><td>프로토콜 수수료에서 소액 고정 보상</td><td>없음</td></tr><tr><td>런치패드 (파트너)</td><td>위젯 임베드, 등록 시 파트너 코드 전달</td><td>파트너 수수료 배분, 자기 리스팅에 "본드 런치" 배지</td><td>없음</td></tr><tr><td>등급 소비자</td><td><code>Launch</code> 계정 또는 등급 API를 읽음</td><td>런치당 리스크 숫자 하나</td><td>없음</td></tr></tbody></table></div>
+<p>각 참여자가 들어오는 이유:</p>
+<ul><li>낙관하는 홀더는 팀을 후원해 팀 본드가 방패인 수익을 얻는다. 신중한 홀더는 첫 구간이 무료이고 팔면 사라지는 보호를 산다. 파기를 예상하는 투기자는 보호를 사고 정산까지 토큰을 들고 있는다.</li><li>팀에게는 검사가 아니라 성장 도구다. 보호받는 홀더는 덜 팔고, 후원자는 용량을 키우며, 본드는 복리로 불고, 등급은 런치패드 티어와 상장 실사에 들어간다. 무료 보호를 스폰서하는 직접 비용은 프로토콜 수수료뿐이다. 명목 보험료의 90%는 팀 자신의 본드로 돌아오기 때문이다.</li></ul>
+<h2 id="s3">3. 메커니즘</h2>
+<h3>3.1 단위</h3>
+<p>프로그램 안의 모든 금액은 INF 토큰 단위다. 커버리지, 보험료, 본드, 후원, 지급 전부 INF다. 프론트엔드는 표시용으로만 USD로 환산하고(Sanctum 가격 API, 폴백 Jupiter) 모든 구매 화면에 "이 보호는 SOL 가치 기준입니다"라는 문장을 보여준다. INF는 가격이 오르는 방식(SOL 기준 가격 상승, 토큰 수량 불변)이라 스테이킹 수익에 별도 회계가 필요 없다.</p>
+<h3>3.2 등록 조건 (시장 없음, 등급 가중치 없음)</h3>
+<p><code>register_launch</code> 시점에 다음이 전부 성립해야 등록된다.</p>
+<ul><li>민트 권한이 <code>None</code>.</li><li>프리즈 권한이 <code>None</code>.</li><li>프로그램 업그레이드 권한이 선언된 멀티시그 또는 타임락(또는 <code>None</code>).</li><li>토큰 메타데이터 불변.</li></ul>
+<p>정적 스캐너가 이미 보는 기본 항목이다. 필터이지 약속이 아니다.</p>
+<h3>3.3 약속 (시장과 등급 가중치)</h3>
+<p>행동 약속이며, 전부 <code>resolve_epoch</code>에 전달된 계정을 읽어 검증한다. 팀이 켤 약속을 고르고 파라미터를 정한다. 파라미터가 엄격할수록 등급 가중치가 오른다.</p>
+<div class="tw"><table><thead><tr><th>#</th><th>약속</th><th>팀이 포기하는 것</th><th>검증</th><th>기본 파라미터</th><th>가중치</th></tr></thead><tbody><tr><td>1</td><td>트레저리 유출 상한 + 수취처 화이트리스트</td><td>임의 인출</td><td><code>스냅샷 잔고 − 현재 잔고 ≤ 상한</code>, 화이트리스트 밖 계정으로의 유출은 파기</td><td>에포크당 트레저리의 5%, 화이트리스트 ≤ 8 계정</td><td>2 (상한 ≤ 2%면 3)</td></tr><tr><td>2</td><td>팀 지갑 매도 상한 (언락 후 포함)</td><td>언락 토큰 덤핑</td><td>선언된 팀 ATA들의 감소 합 ≤ 상한, 선언된 베스팅 프로그램으로의 이전은 예외</td><td>에포크당 유통량의 1%, ATA ≤ 4</td><td>2 (상한 ≤ 0.5%면 3)</td></tr><tr><td>3</td><td>LP 깊이 하한</td><td>유동성 회수</td><td>LP 토큰 계정 잔고 ≥ 하한 × 초기</td><td>80%</td><td>1</td></tr><tr><td>4</td><td>배포 마일스톤</td><td>로드맵 미이행</td><td>마일스톤 에포크까지 <code>ProgramData.last_modified_slot &gt; 등록 슬롯</code></td><td>에포크 2 (약 60일)</td><td>2</td></tr></tbody></table></div>
+<p>성과 약속(v2, 인덱서 필요): 월 온체인 매출 ≥ X, 매출의 X% 바이백, 런웨이 ≥ N개월, 커뮤니티 할당 기한 내 배분. 가중치 3. Creator LST 발행사 약속(커미션 상한, 딜린퀀시 없음, 스테이크풀 권한 불변)도 여기에 속한다.</p>
+<p>약속 하나라도 실패하면 그 에포크는 <strong>Breached</strong>다. 부분 파기 가중은 v2로 미룬다.</p>
+<h3>3.4 본드, 후원, 용량</h3>
+<ul><li>팀은 <code>bond ≥ min_bond</code>(50 SOL 상당의 INF)를 <code>bond_vault</code>에 예치한다.</li><li>후원자는 <code>backing_cap_bps × bond</code>(기본 100%, 즉 후원 ≤ 본드)까지 <code>backing_vault</code>에 INF를 예치한다.</li><li><code>capacity = bond_balance + backing_total</code>. 한 에포크에 팔리는 커버리지는 용량을 넘을 수 없다.</li><li>팀은 <code>sponsor_cap_bps × capacity</code>(기본 20%)까지를 홀더가 무료로 받는 스폰서 보호로 예약할 수 있다.</li></ul>
+<h3>3.5 에포크</h3>
+<p><code>epoch_slots</code> 길이의 에포크 6개(30일 ≈ 6,480,000 슬롯, 테스트 런은 1,500 슬롯 ≈ 10분).</p>
+<pre>register_launch   등록 조건 검사, 본드 입금, 약속 설정, 에포크 0 스냅샷
+에포크 N 오픈      후원자 예치, 홀더 구매 또는 스폰서 보호 수령
+에포크 N 종료      누구나 resolve_epoch 호출
+   Passed         보험료를 본드:후원 비율로 적립, open_epoch N+1
+   Breached       아래 워터폴, 시장 종료
+에포크 6 이후      withdraw_bond, withdraw_backing</pre>
+<h3>3.6 가격</h3>
+<pre>u_bps    = coverage_sold × 10_000 / capacity                     (0..10_000)
+r_bps    = r_min_bps + (r_max_bps − r_min_bps) × u_bps² / 10_000²
+premium  = amount × r_bps / 10_000
+fee      = premium × premium_fee_bps / 10_000                    (10%)
+credit   = premium − fee, 본드 : 후원 잔고 비율로 분배</pre>
+<p>기본값: <code>r_min_bps = 50</code>(에포크당 0.5%), <code>r_max_bps = 1500</code>(에포크당 15%). 전부 정수 연산, <code>u_bps²</code>는 u128, 나눗셈은 내림. 기준값: u = 0.3 → 180 bps, u = 0.8 → 978 bps. 이용률은 구매 직전 값으로 읽는다(장바구니 시점 가격 고정). 구간 적분은 v2.</p>
+<p>스폰서 보호: 홀더는 아무것도 내지 않는다. 프로그램이 현재 <code>r</code>로 명목 보험료를 계산해 <code>fee</code>를 <code>bond_vault</code>에서 <code>fee_vault</code>로 옮기고, 커버리지를 <code>coverage_sold</code>에 포함한다.</p>
+<h3>3.7 보유 연동 커버리지</h3>
+<p>등록 시 팀이 <code>coverage_per_token</code>(토큰 1단위당 INF 커버리지 단위, 런치 가격으로 설정)을 선언한다. 그 뒤:</p>
+<ul><li><code>buy_coverage</code>: <code>amount ≤ 홀더 토큰 잔고 × coverage_per_token − 기존 커버리지</code>. 프로그램은 <code>covered_tokens = amount / coverage_per_token</code>을 기록한다.</li><li><code>claim</code>: <code>홀더 토큰 잔고 ≥ covered_tokens</code>여야 한다. 아니면 <code>HoldingReduced</code>, 지급 없음.</li></ul>
+<p>비율이 등록 시 고정되므로 가격 오라클이 필요 없다.</p>
+<h3>3.8 정산 워터폴</h3>
+<p><strong>Passed.</strong> 전송 없음. <code>passed_epochs += 1</code>, <code>rate_sum_bps += closing_rate_bps</code>. 보험료는 이미 볼트에 있다. 에포크 6 뒤 <code>status = Completed</code>.</p>
+<p><strong>Breached.</strong></p>
+<pre>P  = coverage_sold                          (보호 구매자에게 지급할 액수)
+B  = bond_balance (팀, 적립 보험료와 수익 포함)
+K  = backing_total (후원자, 적립 보험료 포함)
+
+from_bond     = min(P, B)
+from_backing  = P − from_bond               (본드로 충분하면 0)
+remainder     = B − from_bond               (팀의 잔여분)
+slash_fee     = remainder × slash_fee_bps / 10_000     (10%)
+bonus_pool    = remainder − slash_fee       (보호 구매자에게 비율 배분)
+backing_loss  = from_backing                (후원자 비율 손실)
+
+payout_per_unit = (P + bonus_pool) × 1e6 / P</pre>
+<p>파기 시 팀 본드는 전액 소진된다. 커버리지 먼저, 그다음 슬래시 수수료, 나머지는 홀더 보너스. 후원자는 <code>from_backing</code>만 잃는다. <code>P = 0</code>이면 <code>bonus_pool</code> 전액이 <code>fee_vault</code>로 간다.</p>
+<h3>3.9 보호 구매자의 손익 (배율 계산 방식)</h3>
+<p>커버리지는 액면이지 예치금이 아니다. 보호 구매자가 실제로 내는 돈은 보험료뿐이고, 커버리지 금액은 파기 시 받는 돈이다. 따라서 배율은 지급액 ÷ 보험료이며, 이는 보험의 비율이지 위험에 노출된 자본 대비 수익률이 아니다.</p>
+<p>§4.2의 2에포크 파기 예시(요율 3.44%, 커버리지 450에 보너스 풀 63.7):</p>
+<div class="tw"><table><thead><tr><th>항목</th><th>커버리지 30을 산 홀더 한 명</th></tr></thead><tbody><tr><td>낸 보험료</td><td>30 × 3.44% = 1.03</td></tr><tr><td>받는 커버리지 원금</td><td>30.0</td></tr><tr><td>보너스 배분 (63.7 × 30 / 450)</td><td>4.2</td></tr><tr><td>총 수령</td><td>34.2</td></tr><tr><td>지급 ÷ 보험료</td><td>약 33배</td></tr></tbody></table></div>
+<p>순수익은 토큰에 무슨 일이 생기느냐에 달린다. 구매자는 청구 시점에도 <code>covered_tokens</code>를 들고 있어야 하기 때문이다.</p>
+<div class="tw"><table><thead><tr><th>파기 시 토큰</th><th>순결과</th></tr></thead><tbody><tr><td>토큰이 0이 됨</td><td>34.2 − 1.03 − 30 = +3.2</td></tr><tr><td>토큰이 반토막</td><td>34.2 − 1.03 − 15 = +18.2</td></tr><tr><td>토큰 변동 없음</td><td>34.2 − 1.03 = +33.2</td></tr></tbody></table></div>
+<p>즉 보유 전체를 커버한 홀더에게 이 상품은 원금을 지키고 보너스를 더하는 헤지다. 투기적 배율은 스폰서 보호(보험료 0)이거나 실제 위험 대비 큰 포지션을 커버한 경우에만 나오고, 둘 다 보유 상한으로 제한된다.</p>
+<p>배율은 구매 시점의 요율, 즉 그 순간의 이용률에 달려 있다. 보너스를 제외하면 지급 ÷ 보험료 = 1 / r:</p>
+<div class="tw"><table><thead><tr><th>이용률 u</th><th>요율 r</th><th>지급 ÷ 보험료 (보너스 제외)</th></tr></thead><tbody><tr><td>0.0</td><td>0.50%</td><td>200배</td></tr><tr><td>0.3</td><td>1.81%</td><td>55배</td></tr><tr><td>0.6</td><td>5.72%</td><td>17배</td></tr><tr><td>0.8</td><td>9.78%</td><td>10배</td></tr><tr><td>1.0</td><td>15.0%</td><td>7배</td></tr></tbody></table></div>
+<p>아무도 파기를 걱정하지 않을 때 산 사람이 가장 많이 받는다. §4.2의 "10.3배" 같은 시장 전체 숫자는 파기 지급 총액을 모든 에포크·모든 구매자의 보험료 합(통과한 에포크의 구매자 포함)으로 나눈 것이다. 개인 배율은 항상 구매 건별로 그 구매의 요율로 계산한다.</p>
+<p>파기가 없으면 보험료는 그냥 지출이다. §4.2의 이용률 경로로 6개월 내내 커버리지를 유지하면 커버리지 금액의 약 12%를 쓴다. Default 측은 구조적으로 자주 조금 잃고 가끔 크게 얻는다.</p>
+<h3>3.10 등급</h3>
+<p>온체인 필드에서 오프체인으로 계산한다. 원천 입력은 <code>Launch</code> 계정에 있어 누구나 재계산할 수 있다.</p>
+<pre>score = 45 × passed_epochs / 6
+      + 30 × (1 − avg_rate_bps / r_max_bps)
+      + 15 × covenant_weight_sum / max_weight_sum
+      + 10 × min(backing_total / bond, 1)
+등급: AAA ≥ 85 · AA ≥ 75 · A ≥ 65 · BBB ≥ 55 · BB ≥ 45 · B ≥ 35 · CCC ≥ 20 · 파기 시 D</pre>
+<h2 id="s4">4. 수익 모델</h2>
+<h3>4.1 수익원</h3>
+<div class="tw"><table><thead><tr><th>#</th><th>수익원</th><th>요율</th><th>시점</th><th>코드 위치</th></tr></thead><tbody><tr><td>1</td><td>보험료 수수료</td><td>모든 보험료의 10%, 스폰서 보호의 명목 보험료 포함</td><td><code>buy_coverage</code>, <code>claim_sponsored</code></td><td>구매 시 분리, <code>fee_vault</code></td></tr><tr><td>2</td><td>슬래시 수수료</td><td>파기 시 커버리지 지급 후 팀 잔여 본드의 10%</td><td><code>resolve_epoch</code> (Breached)</td><td>워터폴 3단계</td></tr><tr><td>3</td><td>파트너 수수료</td><td>파트너 코드로 등록 시 본드의 0.5%</td><td><code>register_launch</code></td><td>파트너 지갑과 <code>fee_vault</code>로 분배</td></tr><tr><td>4</td><td>등급 API</td><td>렌딩·지갑·애그리게이터 월정액</td><td>6개월 이력이 쌓인 뒤</td><td>백엔드, v2 키</td></tr><tr><td>5</td><td>스테이킹 수익 분배</td><td>v1 0%, 이후 INF 수익의 최대 20%</td><td><code>resolve_epoch</code></td><td>v1은 파라미터만</td></tr></tbody></table></div>
+<p>상장 수수료 없음. 팀은 수수료가 아니라 위험을 건다.</p>
+<h3>4.2 계산 예시 (INF, SOL 가치로 표시)</h3>
+<p>팀 본드 500, 후원 500, 용량 1,000. 에포크 1에 커버리지 600 판매(u = 0.6, r = 5.72%), 런치 공포가 잦아들며 감소.</p>
+<div class="tw"><table><thead><tr><th>에포크</th><th>u</th><th>r</th><th>보험료</th><th>수수료 (10%)</th><th>팀 적립</th><th>후원자 적립</th></tr></thead><tbody><tr><td>1</td><td>0.60</td><td>5.72%</td><td>34.3</td><td>3.4</td><td>15.5</td><td>15.5</td></tr><tr><td>2</td><td>0.45</td><td>3.44%</td><td>15.5</td><td>1.5</td><td>7.0</td><td>7.0</td></tr><tr><td>3</td><td>0.30</td><td>1.81%</td><td>5.4</td><td>0.5</td><td>2.4</td><td>2.4</td></tr><tr><td>4</td><td>0.20</td><td>1.08%</td><td>2.2</td><td>0.2</td><td>1.0</td><td>1.0</td></tr><tr><td>5</td><td>0.12</td><td>0.71%</td><td>0.9</td><td>0.1</td><td>0.4</td><td>0.4</td></tr><tr><td>6</td><td>0.08</td><td>0.59%</td><td>0.5</td><td>0.0</td><td>0.2</td><td>0.2</td></tr><tr><td>합계</td><td></td><td></td><td>58.8</td><td>5.9</td><td>26.5</td><td>26.5</td></tr></tbody></table></div>
+<p>6개월 INF 스테이킹 수익(연 6.4%): 본드 16.0, 후원 16.0.</p>
+<p><strong>6 에포크 전부 통과.</strong> 팀은 500 + 26.5 + 16.0 = 542.5 회수(6개월 8.5%). 후원자도 500 + 26.5 + 16.0 = 542.5. 프로토콜은 보험료 수수료 5.9와 해당 시 파트너 수수료 2.5.</p>
+<p><strong>에포크 2 파기</strong> (트레저리 상한 초과). 지급할 커버리지 P = 450(1,000의 u 0.45). 본드 B = 500 + 15.5 + 5.3(수익) = 520.8. <code>from_bond = 450</code>, <code>from_backing = 0</code>, 잔여 70.8, 슬래시 수수료 7.1, 보너스 63.7. 보호 구매자는 450 + 63.7 = 513.7을 받는다. 에포크 1·2에 모든 구매자가 낸 보험료 49.8 대비 시장 전체로는 10.3배이고, 에포크 2에 산 개인은 자기 보험료의 약 33배를 받는다(§3.9). 팀은 전액 잃는다. 후원자는 잃는 것이 없고 적립 15.5 + 7.0을 유지한다. 프로토콜은 4.9 + 7.1 = 12.0.</p>
+<p><strong>큰 파기</strong> (에포크 1에 커버리지 900, u = 0.9). <code>from_bond = 500 + 적립</code>, <code>from_backing ≈ 380</code>, 후원자는 원금의 약 76%를 잃는다. 선순위는 보통의 파기에 대한 보호이지 보장이 아니며, 프론트엔드의 후원 화면에 이를 명시한다.</p>
+<h3>4.3 시나리오</h3>
+<p>가정: 수익원 1~3만, 파기율 5%, 런치의 절반이 파트너 경유, 생애 보험료 평균 용량의 12%.</p>
+<div class="tw"><table><thead><tr><th>월 신규 런치</th><th>평균 본드</th><th>평균 용량</th><th>월 프로토콜 수익</th></tr></thead><tbody><tr><td>20</td><td>300</td><td>500</td><td>≈ 100 SOL</td></tr><tr><td>100</td><td>400</td><td>700</td><td>≈ 700 SOL</td></tr><tr><td>300</td><td>500</td><td>900</td><td>≈ 2,700 SOL</td></tr></tbody></table></div>
+<p>수익원 4·5 제외. 월 100건이면 6개월 이력이 쌓인 뒤 등급 API가 더 큰 사업이 된다.</p>
+<h2 id="s5">5. 테스트 계획과 테스트 런</h2>
+<h3>5.1 프로그램 테스트 (litesvm 또는 bankrun)</h3>
+<div class="tw"><table><thead><tr><th>경로</th><th>시나리오</th><th>검증</th></tr></thead><tbody><tr><td>A</td><td>6회 통과</td><td>fee vault = 전체 보험료의 10%. 팀·후원자 인출 = 원금 + 비율 적립. <code>passed_epochs = 6</code>, <code>status = Completed</code></td></tr><tr><td>B</td><td>에포크 2 파기, 본드로 충분</td><td><code>from_backing = 0</code>. 홀더 청구 합 = <code>P + bonus_pool</code> (오차 3 이내). 팀 <code>withdraw_bond</code>는 <code>LaunchNotCompleted</code>로 실패. 후원자는 원금 + 적립 인출</td></tr><tr><td>C</td><td>에포크 1 파기, 본드 부족</td><td><code>from_backing &gt; 0</code>. 후원자 손실 비율 배분. 홀더 지급 합 = <code>P + bonus_pool</code></td></tr><tr><td>D</td><td>보유 규칙</td><td><code>보유량 × coverage_per_token</code> 초과 구매는 <code>CoverageExceedsHolding</code>. 청구 전 매도는 <code>HoldingReduced</code></td></tr><tr><td>E</td><td>스폰서 보호</td><td>수수료가 본드에서 이체. 홀더 부담 0. 커버리지가 이용률에 포함. 지갑당 상한 강제</td></tr><tr><td>F</td><td>등록 조건</td><td>민트 권한 활성, 프리즈 권한 활성, EOA 업그레이드 권한, 가변 메타데이터로 등록 시 실패</td></tr><tr><td>G</td><td>가격표</td><td>u ∈ {0, 0.3, 0.5, 0.8, 1.0} → r_bps ∈ {50, 180, 412, 978, 1500}</td></tr><tr><td>H</td><td>에러</td><td>§6.1 에러 코드별 테스트 1개</td></tr></tbody></table></div>
+<h3>5.2 devnet 테스트 런 (데모 리허설)</h3>
+<p><code>epoch_slots = 1500</code>(약 10분), <code>total_epochs = 3</code>으로 배포한다. 스크립트가 지갑 5개를 구동하고 매 에포크 뒤 잔고를 기대값 표와 대조한다.</p>
+<ol><li>프로그램, 테스트 INF 민트(Sanctum이 devnet INF를 제공하면 그것), 더미 런치 3개를 배포한다. 각 런치는 <code>ProgramData</code>가 있는 목 프로그램, 트레저리 ATA, 팀 ATA 2개, LP ATA, 등록 조건을 통과하는 토큰 민트로 구성한다.</li><li>지갑 T(팀)가 각 런치를 본드 50으로 등록하고 약속 4종을 켜고 용량의 10%를 스폰서한다.</li><li>지갑 B1, B2가 런치 1을 각 25씩 후원한다.</li><li>지갑 H1, H2, H3가 토큰을 보유한다. H1은 스폰서 보호를 수령하고 H2, H3는 커버리지를 산다. 스크립트가 구매마다 <code>u</code>와 <code>r</code>을 기록해 §3.6과 비교한다.</li><li>크랭커가 에포크 0을 Passed로 정산하고 에포크 1을 연다. 적립을 검증한다.</li><li>에포크 1 중 지갑 T가 런치 1의 트레저리에서 상한 초과 인출한다.</li><li>크랭커가 에포크 1을 Breached로 정산한다. H1–H3 청구, B1·B2 인출, T의 <code>withdraw_bond</code> 실패. 워터폴을 검증한다.</li><li>런치 2, 3은 에포크 3까지 깨끗이 돌고 T가 본드와 적립을 인출한다.</li><li>인덱서가 60초 안에 런치 1을 D, 런치 2·3을 계산된 등급으로 표시한다. 배지 SVG가 렌더되고 API가 <code>stale: false</code>를 반환한다.</li></ol>
+<p>스크립트를 두 번 돌린다. 한 번은 새 배포에서, 한 번은 재실행으로 멱등성을 확인한다(<code>EpochAlreadyResolved</code>, <code>AlreadyClaimed</code>).</p>
+<h3>5.3 데모 (3분, devnet 런에서 녹화)</h3>
+<ol><li>팀이 등록하고 INF 본드를 걸고 약속 4종을 켜고 무료 보호를 스폰서한다. 20초</li><li>홀더 둘이 후원하고, 둘이 커버리지를 사고, 하나가 무료 보호를 받는다. 곡선 위에서 이용률과 요율이 오른다. 30초</li><li>에포크가 Passed로 정산되고 팀·후원자 카드에 적립이 표시된다. 20초</li><li>팀이 트레저리 상한을 초과 인출한다. 상세 페이지의 약속 1이 빨갛게 바뀐다. 15초</li><li>에포크가 Breached로 정산된다. 홀더 지갑에 INF가 들어오고 런치 카드가 D로 바뀌며 후원자는 온전히 인출한다. 35초</li><li>두 번째 런치의 AAA 배지와 API 응답, Sanctum 트랙 슬라이드 한 장. 20초</li></ol>
+<h2 id="s6">6. 개발 범위</h2>
+<p>가정: 개발자 세 명이 Claude Code를 쓰므로 각 트랙이 4주 안에 전체 범위를 소화할 수 있다. 스트레치 항목은 가장 먼저 잘라낼 수 있도록 마지막에 둔다.</p>
+<h3>6.1 컨트랙트 (Anchor, Rust)</h3>
+<p><strong>계정 (PDA)</strong></p>
+<div class="tw"><table><thead><tr><th>계정</th><th>시드</th><th>주요 필드</th></tr></thead><tbody><tr><td><code>Protocol</code></td><td><code>["protocol"]</code></td><td>admin, fee_vault, allowed_mints[4], premium_fee_bps, slash_fee_bps, partner_fee_bps, r_min_bps, r_max_bps, epoch_slots, total_epochs, min_bond, backing_cap_bps, sponsor_cap_bps, crank_reward</td></tr><tr><td><code>Launch</code></td><td><code>["launch", mint]</code></td><td>team, mint, bond_mint, partner, bond_vault, backing_vault, bond_balance, backing_total, sponsor_reserved, sponsor_used, coverage_per_token, covenants (4 × {enabled, params}), current_epoch, status, passed_epochs, rate_sum_bps, covenant_weight_sum, breached_at_epoch, team_credit, backer_credit_per_unit</td></tr><tr><td><code>Epoch</code></td><td><code>["epoch", launch, index]</code></td><td>start_slot, end_slot, snapshot {treasury, team_atas[4], lp, program_last_modified}, coverage_sold, premium_collected, result, payout_per_unit, closing_rate_bps</td></tr><tr><td><code>Coverage</code></td><td><code>["coverage", epoch, buyer]</code></td><td>amount, covered_tokens, premium_paid, sponsored, claimed</td></tr><tr><td><code>Backing</code></td><td><code>["backing", launch, wallet]</code></td><td>amount, credit_checkpoint, withdrawn</td></tr></tbody></table></div>
+<p><strong>인스트럭션 (12개)</strong></p>
+<div class="tw"><table><thead><tr><th>#</th><th>인스트럭션</th><th>서명자</th><th>전제 조건</th><th>효과</th></tr></thead><tbody><tr><td>0</td><td><code>initialize_protocol</code></td><td>admin</td><td>1회</td><td><code>Protocol</code> 생성, 파라미터 설정</td></tr><tr><td>1</td><td><code>register_launch</code></td><td>team</td><td>등록 조건 통과, bond ≥ min_bond, 허용 민트</td><td><code>Launch</code> 생성, 본드 이체, 파트너 수수료 분리, 스냅샷과 함께 에포크 0 생성</td></tr><tr><td>2</td><td><code>open_epoch</code></td><td>누구나</td><td>이전 에포크 Passed, current &lt; total</td><td>다음 <code>Epoch</code> 생성, 스냅샷</td></tr><tr><td>3</td><td><code>deposit_backing</code></td><td>후원자</td><td>Active, backing_total + amount ≤ 상한</td><td>INF를 <code>backing_vault</code>로, <code>Backing</code> 생성 또는 갱신</td></tr><tr><td>4</td><td><code>buy_coverage</code></td><td>홀더</td><td>에포크 Open, 보유 규칙, 용량</td><td>r 계산, 수수료 분리, 볼트 적립, <code>Coverage</code> 생성 또는 갱신</td></tr><tr><td>5</td><td><code>sponsor_coverage</code></td><td>team</td><td>에포크 Open, 예약 ≤ 스폰서 상한</td><td><code>sponsor_reserved</code> 설정</td></tr><tr><td>6</td><td><code>claim_sponsored</code></td><td>홀더</td><td>예약 잔여, 보유 규칙, 지갑당 상한</td><td><code>sponsored = true</code>로 <code>Coverage</code> 생성, 수수료는 <code>bond_vault</code>에서</td></tr><tr><td>7</td><td><code>resolve_epoch</code></td><td>누구나</td><td>에포크 Open, slot ≥ end_slot, 계정 목록이 등록 주소와 일치</td><td>약속 검증 → Passed 또는 Breached, 워터폴, 크랭크 보상</td></tr><tr><td>8</td><td><code>claim</code></td><td>홀더</td><td>에포크 Breached, 보유 규칙, 미청구</td><td>워터폴 순서로 볼트에서 <code>amount × payout_per_unit</code> 지급</td></tr><tr><td>9</td><td><code>withdraw_backing</code></td><td>후원자</td><td>Completed 또는 Breached(정산 후)</td><td>원금 ± 손실 + 적립 지급</td></tr><tr><td>10</td><td><code>withdraw_bond</code></td><td>team</td><td>Completed</td><td>본드 + 적립 지급</td></tr><tr><td>11</td><td><code>withdraw_fees</code></td><td>admin</td><td></td><td><code>fee_vault</code> → admin 계정</td></tr></tbody></table></div>
+<p><strong>건너뛰면 안 되는 규칙</strong></p>
+<ul><li><code>resolve_epoch</code>에 전달된 모든 계정은 <code>Launch</code>에 저장된 주소와 대조한다. 불일치는 <code>AccountMismatch</code>.</li><li>약속 검사는 <code>ProgramData</code>, <code>Mint</code>, 토큰 계정의 순수 읽기다. 오라클 CPI 없음.</li><li>팀 지갑은 자기 런치에서 <code>buy_coverage</code>, <code>claim_sponsored</code>, <code>deposit_backing</code>을 호출할 수 없다(<code>TeamCannotParticipate</code>).</li><li>모든 산술은 검사된 정수 연산. <code>u_bps²</code>는 u128.</li><li>본드와 후원은 별도 볼트에 둔다. 워터폴 순서가 구조적으로 강제된다.</li></ul>
+<p><strong>에러 코드</strong>: BondTooSmall, BondMintNotAllowed, GateFailed, LaunchExists, EpochNotOpen, EpochNotEnded, EpochAlreadyResolved, CoverageExceedsCapacity, CoverageExceedsHolding, HoldingReduced, BackingCapExceeded, SponsorCapExceeded, TeamCannotParticipate, AccountMismatch, NotBreached, AlreadyClaimed, LaunchNotCompleted, Unauthorized.</p>
+<p><strong>스트레치 (3주차)</strong>: SOL을 받아 Sanctum Router CPI로 INF로 바꾸는 <code>register_launch_with_swap</code>. <code>Protocol</code>의 파트너 화이트리스트와 분배율.</p>
+<h3>6.2 백엔드 (TypeScript, Node 20)</h3>
+<div class="tw"><table><thead><tr><th>구성요소</th><th>범위</th></tr></thead><tbody><tr><td>인덱서</td><td>프로그램 ID에 Helius 웹훅, 60초 <code>getProgramAccounts</code> 폴링 폴백. 테이블: launches, epochs, coverages, backings, fees_daily. PDA 키 기준 멱등 upsert</td></tr><tr><td>등급 서비스</td><td>조회 시 §3.10 계산, 60초 캐시. 소비자가 재계산할 수 있도록 원천 입력을 등급과 함께 노출</td></tr><tr><td>가격 서비스</td><td>Sanctum 가격 엔드포인트의 INF/USD, Jupiter 폴백, 30초 캐시. <code>source</code>와 <code>age_s</code> 반환</td></tr><tr><td>공개 API</td><td><code>GET /launches</code>, <code>GET /launches/:mint</code>, <code>GET /launches/:mint/badge.svg</code> (<code>Cache-Control: max-age=300</code>), <code>GET /launches/:mint/epochs</code>, <code>GET /fees/daily</code> (admin 토큰)</td></tr><tr><td>크랭커</td><td>60초마다: <code>end_slot ≤ now</code>인 Open 에포크마다 <code>Launch.covenants</code>로 계정 목록을 조립해 <code>resolve_epoch</code> 호출, Passed면 <code>open_epoch</code>. 백오프 재시도, 온체인 멱등성에 의존</td></tr><tr><td>테스트 런 스크립트</td><td>§5.2 드라이버: 픽스처 배포, 지갑 5개 시나리오 실행, 기대값 대 실제값 표 출력, 불일치 시 0이 아닌 종료 코드</td></tr><tr><td>스트레치</td><td>키별 rate limit과 사용량 테이블이 있는 API 키(수익원 4의 기반). Breached마다 Discord 웹훅</td></tr></tbody></table></div>
+<p>완료 조건: §5.2 런이 연속 두 번 통과. 배지가 GitHub와 Twitter 카드에서 렌더. 모든 API 응답에 <code>stale</code>과 <code>as_of_slot</code> 포함.</p>
+<h3>6.3 프론트엔드 (Next.js, create-solana-dapp <code>nextjs-anchor</code>)</h3>
+<div class="tw"><table><thead><tr><th>화면</th><th>내용</th><th>호출</th></tr></thead><tbody><tr><td>런치 목록</td><td>등급 배지, 현재 요율, 본드, 후원, 이용률 게이지, 통과 에포크, 남은 스폰서 보호. 등급순 정렬</td><td>API</td></tr><tr><td>런치 상세</td><td>약속 4종의 기준값 / 현재값 / 상태를 RPC로 실시간 읽기. 에포크 타임라인. 현재 지점이 표시된 이용률 곡선. 자본 스택(후원 위, 본드 아래). SOL 기준 안내와 USD 환산</td><td>API + RPC</td></tr><tr><td>보호</td><td>보유량 상한의 금액 입력. 보험료와 파기 시 지급 미리보기. 예약이 남았으면 "무료 보호 받기" 버튼. 서명</td><td><code>buy_coverage</code>, <code>claim_sponsored</code>, <code>claim</code></td></tr><tr><td>후원</td><td>남은 후원 상한의 예치 입력. 현재 요율과 INF APY로 예상 수익. 선순위 설명과 큰 파기 주의 문구. 정산 후 인출</td><td><code>deposit_backing</code>, <code>withdraw_backing</code></td></tr><tr><td>등록 (팀)</td><td>서명 전 RPC로 등록 조건 사전 검사. 파라미터 슬라이더와 결과 가중치가 있는 약속 토글. Sanctum 스왑 링크가 있는 본드 입력. 스폰서 예약. 파트너 코드</td><td><code>register_launch</code>, <code>sponsor_coverage</code>, <code>withdraw_bond</code></td></tr><tr><td>임베드 위젯</td><td>iframe: 배지, 요율, <code>?partner=</code>로 상세 페이지에 딥링크하는 "보호"·"후원" 버튼</td><td>없음</td></tr><tr><td>관리자</td><td>일별 수수료, 크랭커 상태, 대기 중 에포크</td><td>API</td></tr></tbody></table></div>
+<p>지갑: Phantom, Solflare. 모든 트랜잭션에 priority fee. 에러 코드를 쉬운 문장으로 매핑. 스트레치: 스왑 CPI를 쓰는 "SOL로 등록" 플로우, 위젯 모바일 레이아웃.</p>
+<h3>6.4 4주 계획</h3>
+<div class="tw"><table><thead><tr><th>주</th><th>컨트랙트</th><th>백엔드</th><th>프론트엔드</th><th>종료 기준</th></tr></thead><tbody><tr><td>1</td><td>인스트럭션 12개 전부, 약속 검사 4종, 등록 조건, 워터폴. 테스트 경로 A–H 로컬 통과</td><td>스키마, 폴링 인덱서, 가격 서비스, API 뼈대</td><td>지갑 연결, 목 데이터로 목록·상세, 디자인 시스템</td><td>로컬 테스트 전부 통과. API가 픽스처 제공</td></tr><tr><td>2</td><td>devnet 배포, 크랭커 연동, 발견 사항 수정</td><td>웹훅, 등급, 배지, 크랭커, 테스트 런 스크립트 v1</td><td>보호, 후원, 상세를 devnet에 연결</td><td>§5.2 런이 devnet에서 1회 통과</td></tr><tr><td>3</td><td>스폰서 보호 강화. 스트레치: 스왑 CPI, 파트너 화이트리스트</td><td>관리자 엔드포인트. 스트레치: API 키, Discord 알림</td><td>사전 검사가 있는 등록, 위젯, 관리자. 스트레치: SOL로 등록</td><td>§5.2 2회 통과. 실제 팀 2~3곳 devnet 등록. 파트너 페이지 1곳에 위젯 임베드</td></tr><tr><td>4</td><td>동결, 버그 수정만</td><td>동결</td><td>동결, 다듬기</td><td>영상, 덱, GTM 문서, 2026-10-12 제출</td></tr></tbody></table></div>
+<p>협업: 1주차 말에 컨트랙트 레포에서 공유 IDL 하나를 발행하고 백엔드·프론트엔드가 거기서 클라이언트를 생성한다. 매주 금요일 devnet 대상 데모.</p>
+<h2 id="s7">7. 파라미터 (확정)</h2>
+<div class="tw"><table><thead><tr><th>파라미터</th><th>값</th></tr></thead><tbody><tr><td>허용 본드 민트</td><td>INF, devnet 테스트 민트</td></tr><tr><td>min_bond</td><td>50 SOL 상당의 INF</td></tr><tr><td>backing_cap_bps</td><td>10,000 (후원 ≤ 본드)</td></tr><tr><td>sponsor_cap_bps</td><td>2,000 (용량의 20%)</td></tr><tr><td>premium_fee_bps / slash_fee_bps / partner_fee_bps</td><td>1,000 / 1,000 / 50</td></tr><tr><td>r_min_bps / r_max_bps</td><td>50 / 1,500</td></tr><tr><td>epoch_slots / total_epochs</td><td>6,480,000 / 6 (테스트: 1,500 / 3)</td></tr><tr><td>약속 기본값</td><td>트레저리 에포크당 5%, 화이트리스트 ≤ 8. 팀 매도 에포크당 유통량의 1%, ATA ≤ 4. LP 하한 80%. 마일스톤 에포크 2</td></tr><tr><td>프로토콜 스테이킹 수익 분배</td><td>0% (v1)</td></tr><tr><td>가격 소스</td><td>Sanctum, 폴백 Jupiter</td></tr><tr><td>크랭크 보상</td><td>정산당 0.01 INF, fee_vault에서</td></tr><tr><td>지역</td><td>프론트엔드에서 미국 IP 차단. 문구는 "보험"이 아니라 "약속"</td></tr></tbody></table></div>
+<h2 id="s8">8. 리스크</h2>
+<div class="tw"><table><thead><tr><th>리스크</th><th>영향</th><th>대응</th></tr></thead><tbody><tr><td>SOL 가격 하락</td><td>보호의 USD 가치가 함께 하락</td><td>모든 화면에 INF 단위 명시. 보호 대상 자산도 대개 SOL과 같이 움직여 USDC 본드보다 불일치가 작음</td></tr><tr><td>INF 유동성·디페그</td><td>홀더가 지급액을 팔 때 슬리피지</td><td>지급은 INF 그대로. Sanctum Reserve로 즉시 언스테이크</td></tr><tr><td>Sanctum 컨트랙트 리스크</td><td>본드 자산 자체의 사고</td><td>허용 민트 목록으로 USDC 경로 유지</td></tr><tr><td>큰 파기</td><td>후원자 원금 손실</td><td>후원 상한 본드 1배. 후원 화면에 주의 문구. 예치당 최악 손실 표시</td></tr><tr><td>정직한 팀의 약속 위반</td><td>억울한 파기</td><td>팀이 파라미터 설정. 트레저리 화이트리스트. 서명 전 프론트엔드가 최근 30일 데이터로 각 약속을 시뮬레이션</td></tr><tr><td>규제</td><td>보험·CDS로 분류될 가능성</td><td>지급은 제3자 풀이 아니라 팀 자신의 본드에서. 미국 유저 없음. 문구에서 "보험" 배제</td></tr><tr><td>크랭커 장애</td><td>에포크 정산 지연</td><td>누구나 크랭크 가능. 정산은 퍼미션리스이고 보상이 있음</td></tr></tbody></table></div>
+<h2 id="s9">9. Sanctum 트랙</h2>
+<ol><li>INF 본드 (해커톤). 요청: INF를 본드 자산으로 리스팅해도 된다는 확인, 런치 페이지 공동 문구, 덱 코멘트.</li><li>Creator LST 발행사를 두 번째 시장으로 (액셀러레이터). 약속: 커미션 상한, 딜린퀀시 없음, 스테이크풀 권한 불변. 요청: 10월 런치 예정 팀 2~3곳 소개(3주차 트랙션).</li><li>리스테이크 자본을 선순위 후원으로 (v2, Jito Restaking NCN). 약속 파기가 슬래싱 조건, 보험료가 리스테이킹 보상.</li></ol>
+<h2 id="s10">10. 용어</h2>
+<div class="tw"><table><thead><tr><th>용어</th><th>뜻</th></tr></thead><tbody><tr><td>본드</td><td>팀이 예치하는 INF. 파기 시 가장 먼저 잃음</td></tr><tr><td>후원 (backing)</td><td>홀더가 본드 옆에 예치하는 INF. 본드보다 선순위</td></tr><tr><td>용량</td><td>본드 + 후원. 팔 수 있는 커버리지 최대치</td></tr><tr><td>커버리지</td><td>홀더가 사거나 받는 보호 금액. 토큰 보유와 연동</td></tr><tr><td>스폰서 보호</td><td>팀이 미리 걸어 홀더가 무료로 받는 커버리지. 팀은 프로토콜 수수료만 부담</td></tr><tr><td>약속 (covenant)</td><td>프로그램이 계정에서 검증하는 행동 약속</td></tr><tr><td>에포크</td><td>30일 정산 주기. 런치당 6회</td></tr><tr><td>이용률</td><td>팔린 커버리지 ÷ 용량. 보험료율을 정함</td></tr><tr><td>워터폴</td><td>파기 시 지급 순서: 팀 본드, 그다음 후원. 팀 잔여분은 수수료 / 홀더로 분할</td></tr><tr><td>PDA</td><td>프로그램 파생 주소. 결정적 계정 키</td></tr></tbody></table></div>
+  <footer>원본: <code>docs/infinite-bond-spec-ko.md</code> (브랜치 <code>claude/solana-colosseum-hackathon-yezkp4</code>). 영문 원본: <code>docs/infinite-bond-spec-en.md</code>. <code>project-spec.md</code>의 부록 A–C를 대체한다.</footer>
+</div>

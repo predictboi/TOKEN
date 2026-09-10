@@ -1,6 +1,6 @@
 # INFINITE BOND — Product and Engineering Specification
 
-Version 3.1 (final for hackathon build) · 2026-09-10
+Version 3.1.1 (final for hackathon build) · 2026-09-10
 Target: Colosseum Crypto World's Fair, Solana track · Submission 2026-10-12
 Status: This document supersedes `project-spec.md` appendices A–C. Where numbers differ, this document wins.
 
@@ -26,7 +26,7 @@ No oracle, indexer, or vote decides outcomes. Every covenant is checked inside t
 |---|---|---|---|
 | Team (issuer) | Passes the registration gate, selects covenants and parameters, posts an INF bond, optionally sponsors free coverage | Rating account, reduced early sell pressure, premiums (their share of 90%), INF staking yield on the bond, community capital via backers | Entire bond on any breach, including accrued premiums and yield |
 | Backer (holder, pass side) | Deposits INF alongside the team bond, up to a cap | Pro-rata share of premiums and INF yield, senior to the team bond | Loses only the shortfall after the team bond is exhausted |
-| Protection buyer (holder, default side) | Buys coverage priced by utilization, capped by token holdings; may claim sponsored coverage for free | On breach: full coverage plus a share of the team's remaining bond, typically 8–17× premium | Premium paid; protection voids if tokens are sold |
+| Protection buyer (holder, default side) | Buys coverage priced by utilization, capped by token holdings; may claim sponsored coverage for free | On breach: full coverage plus a share of the team's remaining bond; payout ÷ premium runs from 7× to 200× depending on the rate at purchase (§3.9) | Premium paid; protection voids if tokens are sold |
 | Cranker | Calls `resolve_epoch` and `open_epoch` after each epoch ends | Small fixed reward from protocol fees | None |
 | Launchpad (partner) | Embeds the widget and passes a partner code at registration | Share of partner fee, a "bonded launch" badge for its listings | None |
 | Rating consumer | Reads the `Launch` account or the rating API | A single risk number per launch | None |
@@ -136,7 +136,45 @@ payout_per_unit = (P + bonus_pool) × 1e6 / P
 
 The team's bond is fully consumed on any breach: coverage first, then slash fee, then bonus to holders. Backers lose only `from_backing`. If `P = 0`, `bonus_pool` goes entirely to `fee_vault`.
 
-### 3.9 Rating
+### 3.9 Protection buyer economics (how the multiple is computed)
+
+Coverage is a face amount, not a deposit. A protection buyer pays only the premium; the coverage amount is what they receive on a breach. The multiple is therefore payout divided by premium, and it is the insurance ratio, not a return on capital at risk.
+
+Example from the epoch-2 breach in §4.2 (rate 3.44%, bonus pool 63.7 on 450 of coverage):
+
+| Item | One holder with coverage 30 |
+|---|---|
+| Premium paid | 30 × 3.44% = 1.03 |
+| Coverage principal received | 30.0 |
+| Bonus share (63.7 × 30 / 450) | 4.2 |
+| Total received | 34.2 |
+| Payout ÷ premium | ≈ 33× |
+
+Net profit depends on what happens to the token, because the buyer must still hold `covered_tokens` at claim time:
+
+| Token outcome at breach | Net result |
+|---|---|
+| Token goes to zero | 34.2 − 1.03 − 30 = +3.2 |
+| Token loses half | 34.2 − 1.03 − 15 = +18.2 |
+| Token unchanged | 34.2 − 1.03 = +33.2 |
+
+So for a holder who covers their full position, the product is a hedge that preserves principal and adds the bonus. Speculative multiples arise only from sponsored coverage (premium 0) or from covering a large position relative to what is actually at risk, and both are bounded by the holding cap.
+
+The multiple depends on the rate at purchase, i.e. on utilization at that moment. Ignoring the bonus, payout ÷ premium = 1 / r:
+
+| Utilization u | Rate r | Payout ÷ premium (before bonus) |
+|---|---|---|
+| 0.0 | 0.50% | 200× |
+| 0.3 | 1.81% | 55× |
+| 0.6 | 5.72% | 17× |
+| 0.8 | 9.78% | 10× |
+| 1.0 | 15.0% | 7× |
+
+Buyers who purchase when nobody fears a breach are paid the most. Market-wide figures such as "10.3×" in §4.2 divide the total breach payout by all premiums collected across every epoch and every buyer, including buyers whose epochs passed; individual multiples are always computed per purchase at that purchase's rate.
+
+If no breach occurs, premiums are simply spent. Over a full six-month run at the §4.2 utilization path, a buyer who keeps coverage every epoch spends about 12% of their coverage amount. The default side is structurally a frequent small loss and an occasional large gain.
+
+### 3.10 Rating
 
 Computed off-chain from on-chain fields; raw inputs live in the `Launch` account so anyone can recompute.
 
@@ -182,7 +220,7 @@ INF staking yield over six months at 6.4% APY: 16.0 on the bond, 16.0 on backing
 
 **All six epochs pass.** Team withdraws 500 + 26.5 + 16.0 = 542.5 (8.5% over six months). Backers withdraw 500 + 26.5 + 16.0 = 542.5. Protocol earns 5.9 in premium fees plus 2.5 partner fee if applicable.
 
-**Breach in epoch 2** (treasury cap exceeded). Coverage owed P = 450 (u = 0.45 of 1,000). Bond B = 500 + 15.5 + 5.3 (yield) = 520.8. `from_bond = 450`, `from_backing = 0`, remainder 70.8, slash fee 7.1, bonus 63.7. Covered holders receive 450 + 63.7 = 513.7 on 49.8 of premiums (10.3×). Team loses everything. Backers lose nothing and keep 15.5 + 7.0 in credits. Protocol earns 4.9 + 7.1 = 12.0.
+**Breach in epoch 2** (treasury cap exceeded). Coverage owed P = 450 (u = 0.45 of 1,000). Bond B = 500 + 15.5 + 5.3 (yield) = 520.8. `from_bond = 450`, `from_backing = 0`, remainder 70.8, slash fee 7.1, bonus 63.7. Covered holders receive 450 + 63.7 = 513.7. Against the 49.8 of premiums collected across epochs 1 and 2 from all buyers, that is a market-wide 10.3×; an individual buyer in epoch 2 receives about 33× their own premium (see §3.9). Team loses everything. Backers lose nothing and keep 15.5 + 7.0 in credits. Protocol earns 4.9 + 7.1 = 12.0.
 
 **Larger breach** (coverage 900 in epoch 1, u = 0.9). `from_bond = 500 + credits`, `from_backing ≈ 380`, backers lose about 76% of principal. The senior position is protection against ordinary breaches, not a guarantee; the frontend states this on the backing screen.
 
@@ -213,7 +251,7 @@ Streams 4 and 5 are excluded. At 100 launches per month the rating API becomes t
 | E | Sponsored coverage | Fee transferred from bond; holder pays nothing; coverage counts toward utilization; per-wallet cap enforced |
 | F | Gate | Registration with live mint authority, live freeze authority, EOA upgrade authority, or mutable metadata fails |
 | G | Pricing table | u ∈ {0, 0.3, 0.5, 0.8, 1.0} → r_bps ∈ {50, 180, 412, 978, 1500} |
-| H | Errors | One test per error code in §7.4 |
+| H | Errors | One test per error code in §6.1 |
 
 ### 5.2 Devnet test run (the rehearsal for the demo)
 
