@@ -1,4 +1,4 @@
-# INFINITE BOND (가칭) · 계획서 v3
+# INFINITE BOND (가칭) · 계획서 v3.1
 
 작성일: 2026-09-10
 기준: Sanctum INF 연동. 도식·차트가 포함된 페이지 원본은 `docs/infinite-bond.html`.
@@ -6,6 +6,18 @@
 ## 한 문장
 
 팀이 INF로 본드를 걸고, 홀더가 약속 파기 보호를 사고, 6개월 이력이 신용등급이 된다. 본드는 잠겨 있는 동안 Sanctum Infinity의 스테이킹 수익(연 6.4%)을 낸다.
+
+## 누가, 왜 들어오나 (v3.1)
+
+- **Backer (홀더, Pass 측, 선순위)**: INF를 팀 본드 옆에 예치(상한 팀 본드 1배). 보험료·스테이킹을 비율대로. 파기 시 팀 본드가 먼저 전액 흡수한 뒤에야 손실.
+- **보호 구매자 (홀더, Default 측)**: 커버리지는 보유량까지, 파기 시점에도 보유해야 지급. 팔면 소멸. 첫 20% 용량은 팀이 무료 제공 가능.
+- **팀 (후순위)**: 매도 압력 감소, 본드 6개월 약 17%, 커뮤니티 자본으로 용량 확대, 등급 → 런치패드 티어·상장 실사. 스폰서 보호의 실비용은 수수료 10%.
+
+예시: 팀 500 + Backer 500, 커버리지 600 (u 0.6, 월 5.7%) → 월 보험료 34.2 = 수수료 3.4 + 팀 15.4 + Backer 15.4. Backer 월 3.1% + 스테이킹 0.5%. 파기: 팀 500 전액 + Backer 100.
+
+## 약속 (부록 B)
+
+0단계 등록 조건(민트·프리즈 권한 없음, 업그레이드 멀티시그, 메타데이터 불변) + 1단계 행동 약속 4종(트레저리 유출 상한+화이트리스트, 팀 지갑 매도 상한, LP 깊이 80%, 배포 마일스톤) + 2단계 성과 약속(v2). 등급은 난이도 가중합 + Backer 참여율.
 
 ## 왜 INF인가
 
@@ -46,7 +58,8 @@
 | Launch.bond_mint | 런치별 민트 기록. 커버리지·지급 단위 |
 | register_launch | 팀의 INF ATA → bond_vault, 민트 검증 |
 | 프론트 | INF 수량 + USD 환산, "SOL 기준" 문구, 등록 화면에 Sanctum 스왑 링크 |
-| 에러 | BondMintNotAllowed 추가 |
+| 계정·인스트럭션 (v3.1) | Backing 계정, deposit_backing, withdraw_backing, sponsor_coverage(스트레치). buy_coverage 보유량 상한, claim 보유 검사, resolve 팀 우선 차감 |
+| 에러 | BondMintNotAllowed, CoverageExceedsHolding, HoldingReduced, BackingCapExceeded |
 | v2 | Sanctum Router CPI로 SOL → INF 자동 변환, 스테이킹 수익 분배 |
 
 인스트럭션 8개, 계정 4종, 약속 5종, 에러 12종은 `docs/dev-handoff.md`와 동일.

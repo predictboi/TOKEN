@@ -65,16 +65,16 @@
 
 <div class="nav"><div class="in">
   <span class="mark">INFINITE BOND</span>
-  <div class="menu"><a href="#why">왜 INF</a><a href="#system">구조</a><a href="#money">돈의 흐름</a><a href="#revenue">수익</a><a href="#build">개발</a><a href="#sanctum">Sanctum 트랙</a><a href="#plan">일정</a></div>
+  <div class="menu"><a href="#why">왜 INF</a><a href="#system">구조</a><a href="#money">돈의 흐름</a><a href="#why-join">참여 이유</a><a href="#revenue">수익</a><a href="#build">개발</a><a href="#sanctum">Sanctum 트랙</a><a href="#plan">일정</a></div>
   <div class="right"><a class="btn-secondary" href="https://github.com/predictboi/TOKEN/blob/claude/solana-colosseum-hackathon-yezkp4/docs/dev-handoff.md">개발자 인계서</a><a class="btn-primary" href="https://github.com/predictboi/TOKEN/pull/3">PR #3</a></div>
 </div></div>
 
 <!-- HERO -->
 <section class="band hero"><div class="wrap">
-  <div class="meta">계획서 v3 · 가칭 · 2026-09-10 · Sanctum INF 연동 기준</div>
+  <div class="meta">계획서 v3.1 · 가칭 · 2026-09-10 · Sanctum INF 연동 기준</div>
   <h1>INFINITE BOND</h1>
-  <p class="sub">팀이 INF로 본드를 걸고, 홀더가 약속 파기 보호를 사고, 6개월 이력이 신용등급이 된다.</p>
-  <p>본드는 잠겨 있는 동안 Sanctum Infinity의 스테이킹 수익을 냅니다. 팀은 조달한 SOL을 그대로 INF로 바꿔 걸 수 있고, 약속을 지키면 본드와 보험료와 스테이킹 수익을 함께 돌려받습니다. 모든 금액은 INF 단위이고 프론트에서만 달러로 환산합니다.</p>
+  <p class="sub">팀이 INF로 본드를 걸고, 홀더는 보호를 사거나 팀 옆에 자본을 대며, 6개월 이력이 신용등급이 된다.</p>
+  <p>본드는 잠겨 있는 동안 Sanctum Infinity의 스테이킹 수익을 냅니다. 팀은 조달한 SOL을 그대로 INF로 바꿔 걸고, 파기 시 가장 먼저 잃는 자리에 섭니다. 홀더는 그 뒤에 서서 보험료와 스테이킹 수익을 나눠 받거나, 반대편에서 보호를 삽니다. 모든 금액은 INF 단위이고 프론트에서만 달러로 환산합니다.</p>
   <div class="cta-row"><a class="btn-primary" href="#system">구조부터 보기</a><a class="btn-secondary" href="#revenue">수익부터 보기</a></div>
 </div></section>
 
@@ -86,7 +86,7 @@
     <div class="cols">
       <div><h4>팀의 비용이 사라진다</h4><p>본드 500 SOL 상당이 연 6.4%로 6개월간 약 16 SOL을 법니다. 잠긴 자본의 기회비용을 스테이킹 수익이 상쇄합니다.</p></div>
       <div><h4>팀이 가진 돈으로 낸다</h4><p>런치 팀의 조달금은 대개 SOL입니다. USDC로 바꾸지 않고 Sanctum Router에서 INF로 바꿔 그대로 겁니다.</p></div>
-      <div><h4>원금이 안 깎인다</h4><p>v1의 Meteora LP 운용은 비영구 손실 때문에 뺐습니다. LST는 SOL 기준으로 수량이 늘기만 합니다. 정산 로직이 바뀌지 않습니다.</p></div>
+      <div><h4>팀이 가장 먼저 잃는다</h4><p>파기 시 커버리지는 팀 본드에서 먼저 전액 나갑니다. 그래서 홀더가 팀 옆에 자본을 대도 팀 본드가 방패가 되고, 팀이 자기 돈을 후순위에 두었다는 사실이 곧 신호입니다.</p></div>
     </div>
   </div>
 </div></section>
@@ -167,6 +167,57 @@
       </g>
     </svg>
   </div><figcaption>숫자는 전부 INF를 SOL 가치로 환산한 것입니다. Breach에서는 이미 붙은 스테이킹 수익도 본드에 포함되어 홀더에게 갑니다. 약속을 깬 팀은 수익까지 잃습니다.</figcaption></figure>
+</div></section>
+
+<!-- WHITE: who joins and why (v3.1) -->
+<section class="band top0" id="why-join"><div class="wrap">
+  <h2>누가, 왜 들어오나</h2>
+  <p class="lead">리테일에게 돈 쓰는 자리만 있으면 시장이 서지 않습니다. 홀더가 양쪽에 다 설 수 있게 하고, 팀 본드를 가장 먼저 잃는 층으로 둡니다.</p>
+  <div class="grid c2">
+    <figure style="margin:0"><div class="fig">
+      <svg viewBox="0 0 520 330" role="img" aria-label="자본 스택: 위에 Backer 선순위 INF, 아래에 팀 본드 후순위 INF. 보험료와 스테이킹 수익은 비율대로 분배되고, 파기 시 손실은 아래 팀 본드부터 흡수한다. 오른쪽에 보호 구매자">
+        <defs><marker id="a5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+        <g font-family="Inter, Noto Sans KR, sans-serif" font-size="12" fill="#181d26">
+          <text x="150" y="24" text-anchor="middle" font-weight="500">Pass 측 · 자본 스택 (INF)</text>
+          <rect x="40" y="40" width="220" height="90" rx="8" fill="#a8d8c4"/>
+          <text x="150" y="70" text-anchor="middle" font-weight="500">Backer (홀더) · 선순위</text>
+          <text x="150" y="90" text-anchor="middle" font-size="11">최대 팀 본드 1배 · 예: 500</text>
+          <text x="150" y="108" text-anchor="middle" font-size="11">보험료·스테이킹 비율 분배 · 나중에 잃음</text>
+          <rect x="40" y="138" width="220" height="90" rx="8" fill="#aa2d00"/>
+          <text x="150" y="168" text-anchor="middle" font-weight="500" fill="#fff">팀 본드 · 후순위 (first-loss)</text>
+          <text x="150" y="188" text-anchor="middle" font-size="11" fill="#fff" opacity=".9">예: 500 · 약속 파기 시 먼저 전액</text>
+          <text x="150" y="206" text-anchor="middle" font-size="11" fill="#fff" opacity=".9">6개월 Pass면 본드 + 보험료 + 수익 회수</text>
+          <line x1="285" y1="228" x2="285" y2="140" stroke="#181d26" stroke-width="1.4" marker-end="url(#a5)"/>
+          <text x="292" y="190" font-size="11" fill="#41454d">파기 손실</text><text x="292" y="204" font-size="11" fill="#41454d">흡수 순서</text>
+          <text x="420" y="24" text-anchor="middle" font-weight="500">Default 측</text>
+          <rect x="350" y="40" width="140" height="120" rx="8" fill="none" stroke="#181d26"/>
+          <text x="420" y="66" text-anchor="middle" font-weight="500">보호 구매자 (홀더)</text>
+          <text x="420" y="88" text-anchor="middle" font-size="11">보유량까지만 구매</text>
+          <text x="420" y="106" text-anchor="middle" font-size="11">팔면 보호 소멸</text>
+          <text x="420" y="124" text-anchor="middle" font-size="11">첫 20%는 팀이 무료 제공</text>
+          <text x="420" y="146" text-anchor="middle" font-size="11">파기 시 8~17배</text>
+          <g stroke="#181d26" stroke-width="1.3" fill="none" marker-end="url(#a5)"><line x1="350" y1="100" x2="262" y2="100"/><line x1="262" y1="120" x2="348" y2="120"/></g>
+          <text x="306" y="94" text-anchor="middle" font-size="11" fill="#41454d">보험료</text>
+          <text x="306" y="134" text-anchor="middle" font-size="11" fill="#41454d">파기 시 지급</text>
+          <g font-size="11" fill="#41454d">
+            <text x="40" y="262">예시: 커버리지 600 판매 (u 0.6, 월 5.7%) → 월 보험료 34.2</text>
+            <text x="40" y="280">수수료 3.4 · 팀 15.4 · Backer 15.4 → Backer 월 3.1% + 스테이킹 0.5%</text>
+            <text x="40" y="298">파기: 커버리지 600 = 팀 500 전액 + Backer 100 (Backer −20%)</text>
+            <text x="40" y="316">팀 본드가 Backer의 방패. 팀이 후순위라는 것 자체가 신호</text>
+          </g>
+        </g>
+      </svg>
+    </div><figcaption>원래 구상의 "Default 측은 베팅, Pass 측은 패시브 인컴"이 이 구조에서 성립합니다. Pass 측이 안전한 이유는 팀 본드가 먼저 깨지기 때문입니다.</figcaption></figure>
+    <div>
+      <div class="grid c2" style="gap:16px">
+        <div class="demo peach"><span class="tag">홀더 · 보호</span><span class="k">들고 있으면 보호, 팔면 소멸</span><p>커버리지는 보유량까지만. 첫 달은 팀이 무료로 걸어둔 분량이 있어 공짜 또는 저렴. 파기 시 고배율 지급.</p></div>
+        <div class="demo mint"><span class="tag">홀더 · Backer</span><span class="k">팀 본드 뒤의 선순위 수익</span><p>런치 초기 월 3~4%의 보험료 + 스테이킹. 팀이 먼저 잃으니 원래 구상의 패시브 인컴 자리.</p></div>
+        <div class="demo yellow"><span class="tag">팀</span><span class="k">매도 압력이 줄고 본드가 벌어온다</span><p>보호가 보유와 묶여 초기 덤핑이 줄어듦. 본드는 6개월 약 17%. 커뮤니티 자본으로 용량 확대. 등급은 런치패드 티어와 상장 실사에.</p></div>
+        <div class="demo creamy"><span class="tag">팀 · 스폰서 보호</span><span class="k">실비용은 수수료 10%뿐</span><p>용량의 20%까지 무료 보호를 걸어두면 "90일 러그 보호가 붙은 런치"가 된다. 보험료의 90%는 어차피 팀 본드로 돌아온다.</p></div>
+      </div>
+      <p style="margin-top:16px"><strong>해커톤 우선순위.</strong> 1 보유 연동 보호, 2 Backer 선순위 풀, 3 스폰서 보호(3주차 여유 시). 인스트럭션 3개가 늘어납니다.</p>
+    </div>
+  </div>
 </div></section>
 
 <!-- CREAM: chart accrual to team -->
@@ -311,16 +362,17 @@
 <!-- FOREST: covenants -->
 <section class="band top0"><div class="wrap">
   <div class="sig forest">
-    <h2>약속 5종. 전부 프로그램이 계정을 직접 읽어 판정한다.</h2>
-    <p>GitHub 브랜치 보호 규칙과 같습니다. 사람도 오라클도 투표도 끼지 않습니다. 본드가 INF로 바뀌어도 약속은 그대로입니다.</p>
+    <h2>약속은 팀이 실제로 무언가를 포기하는 것만 센다.</h2>
+    <p>민트 권한 포기 같은 정적 항목은 RugCheck가 이미 봅니다. 그건 입장권이지 약속이 아닙니다. 약속은 지키는 데 비용이 들고, 온체인에서 검증되고, 홀더가 실제로 두려워하는 행동이어야 합니다.</p>
     <div class="cols">
-      <div><h4>1 · 업그레이드 권한 불변</h4><p>ProgramData.upgrade_authority == 등록 시 값</p></div>
-      <div><h4>2 · 민트 권한 없음</h4><p>Mint.mint_authority == None</p></div>
-      <div><h4>3 · 트레저리 유출 상한</h4><p>스냅샷 − 현재 ≤ 월 상한</p></div>
-      <div><h4>4 · 팀 지갑 무매도</h4><p>현재 ≥ 스냅샷 (언락 전)</p></div>
-      <div><h4>5 · LP 락 유지</h4><p>LP 토큰 계정 잔고 ≥ 스냅샷</p></div>
-      <div><h4>Sanctum 2단계용 3종 (Creator LST 발행사)</h4><p>커미션 상한 · 밸리데이터 딜린퀀시 없음 · 스테이크풀 권한 불변. 스테이크풀 계정을 읽어 같은 방식으로 판정.</p></div>
+      <div><h4>0단계 · 등록 조건 (시장 없음)</h4><p>민트 권한 없음 · 프리즈 권한 없음 · 업그레이드 권한 멀티시그/타임락 · 메타데이터 불변. 미충족이면 등록 거부. 등급에 반영하지 않음.</p></div>
+      <div><h4>1 · 트레저리 유출 상한 + 화이트리스트</h4><p>스냅샷 − 현재 ≤ 월 상한. 수취 계정이 화이트리스트 밖이면 파기. 가중치 2.</p></div>
+      <div><h4>2 · 팀 지갑 매도 상한 (언락 후 포함)</h4><p>팀 ATA 감소 ≤ 월 상한. 베스팅 계약 이전은 예외. 언락은 계약이 강제하니 진짜 약속은 "언락된 걸 얼마나 파는가". 가중치 2.</p></div>
+      <div><h4>3 · LP 깊이 유지</h4><p>LP 토큰 잔고 ≥ 초기의 80%. 가중치 1.</p></div>
+      <div><h4>4 · 배포 마일스톤</h4><p>D+N까지 지정 프로그램의 ProgramData 갱신 슬롯 > 등록 슬롯. "하겠다"는 약속이라 로드맵에 돈이 걸림. 가중치 2.</p></div>
+      <div><h4>2단계 · 성과 약속 (v2, 인덱서)</h4><p>월 온체인 매출 ≥ X · 수익 X% 바이백 이행 · 런웨이 ≥ N개월 · 커뮤니티 할당 기한 내 배분. 가중치 3. Creator LST 발행사용 3종(커미션 상한, 딜린퀀시 없음, 스테이크풀 권한 불변)도 여기.</p></div>
     </div>
+    <p style="margin-top:24px">등급 산식은 "켠 약속 수"가 아니라 "난이도 가중합"입니다. 상한을 빡빡하게 잡을수록 가중치가 오르고, Backer 참여율도 입력에 들어갑니다.</p>
   </div>
 </div></section>
 
@@ -339,10 +391,14 @@
           <tr><td>buy_coverage</td><td>USDC 보험료</td><td>INF 보험료. 수식 동일</td></tr>
           <tr><td>resolve / claim</td><td>USDC 지급</td><td>INF 지급. 스테이킹 수익은 INF 가격 상승에 이미 반영되어 별도 처리 없음</td></tr>
           <tr><td>프론트</td><td>USD 표시</td><td>INF 수량 + USD 환산(Sanctum/Jupiter 가격). "SOL 기준" 문구</td></tr>
+          <tr><td>Backing 계정 (v3.1)</td><td>없음</td><td>launch + wallet: amount, claimed. Launch에 backing_total, backing_cap_bps, sponsor_reserved</td></tr>
+          <tr><td>인스트럭션 추가 (v3.1)</td><td></td><td><code>deposit_backing</code>, <code>withdraw_backing</code>, <code>sponsor_coverage</code>(스트레치)</td></tr>
+          <tr><td>buy_coverage / claim (v3.1)</td><td></td><td>구매 상한 = 지갑 토큰 보유량. claim 시 잔고 ≥ 대응 수량 검사. 스폰서 예약분은 보험료 0</td></tr>
+          <tr><td>resolve_epoch (v3.1)</td><td></td><td>분배는 팀:Backer 비율, 파기 시 팀 본드 우선 차감</td></tr>
           <tr><td>v2 추가</td><td></td><td>Sanctum Router CPI로 SOL → INF 자동 변환. 스테이킹 수익 분배(수익원 5)</td></tr>
         </tbody>
       </table></div>
-      <p>인스트럭션 8개, 계정 4종, 에러 12종은 개발자 인계서와 동일합니다. 추가 에러는 <code>BondMintNotAllowed</code> 하나입니다.</p>
+      <p>인스트럭션 8 + 3개, 계정 5종. 추가 에러는 <code>BondMintNotAllowed</code>, <code>CoverageExceedsHolding</code>, <code>HoldingReduced</code>, <code>BackingCapExceeded</code>입니다.</p>
     </div>
     <figure style="margin:0"><div class="fig">
       <svg viewBox="0 0 520 300" role="img" aria-label="팀이 SOL을 Sanctum Router에서 INF로 바꾼 뒤 register_launch로 예치하고, 홀더가 buy_coverage로 INF 보험료를 내며, resolve와 claim이 INF로 정산하는 시퀀스">
@@ -435,7 +491,7 @@
         <g font-size="11" fill="#41454d"><text x="290" y="24" text-anchor="middle">1주</text><text x="470" y="24" text-anchor="middle">2주</text><text x="650" y="24" text-anchor="middle">3주</text><text x="830" y="24" text-anchor="middle">4주</text></g>
         <g stroke="#dddddd"><line x1="200" y1="30" x2="200" y2="230"/><line x1="380" y1="30" x2="380" y2="230"/><line x1="560" y1="30" x2="560" y2="230"/><line x1="740" y1="30" x2="740" y2="230"/></g>
         <text x="20" y="64" font-weight="500">온체인</text>
-        <rect x="200" y="46" width="176" height="28" rx="6" fill="#fcab79"/><text x="288" y="65" text-anchor="middle" font-size="11">인스트럭션 8개 · INF 민트 · 테스트</text>
+        <rect x="200" y="46" width="176" height="28" rx="6" fill="#fcab79"/><text x="288" y="65" text-anchor="middle" font-size="11">인스트럭션 8+3 · 약속 4종 · 테스트</text>
         <rect x="380" y="46" width="176" height="28" rx="6" fill="#fcab79"/><text x="468" y="65" text-anchor="middle" font-size="11">devnet 배포 · 크랭커</text>
         <rect x="560" y="46" width="176" height="28" rx="6" fill="#fcab79"/><text x="648" y="65" text-anchor="middle" font-size="11">버그 · 파트너 필드</text>
         <text x="20" y="124" font-weight="500">인덱서 · API</text>
@@ -470,11 +526,13 @@
       </div>
       <div>
         <h2>개발 전 확정할 것</h2>
+        <p><strong>0. 약속 4종의 기본 파라미터.</strong> 트레저리 월 상한(잔고의 5%), 팀 매도 월 상한(유통량의 1%), LP 80%, 배포 마일스톤 D+60.</p>
         <p><strong>1. 허용 민트.</strong> 제안: INF + 데모용 테스트 민트. USDC는 v2에서 병행 여부 결정.</p>
         <p><strong>2. 최소 본드.</strong> 제안: 50 SOL 상당의 INF.</p>
         <p><strong>3. 스테이킹 수익 분배.</strong> 제안: v1은 팀 100%. 프로토콜 몫은 시장이 선 뒤 20%까지.</p>
         <p><strong>4. USD 환산 가격 소스.</strong> 제안: Sanctum 가격 API, 폴백 Jupiter.</p>
-        <p><strong>5. Creator LST 발행사 약속 3종의 파라미터.</strong> Sanctum과 논의 후 확정.</p>
+        <p><strong>5. Backer 용량 상한과 스폰서 보호 상한.</strong> 제안: 팀 본드의 1배, 용량의 20%.</p>
+        <p><strong>6. Creator LST 발행사 약속 3종의 파라미터.</strong> Sanctum과 논의 후 확정.</p>
         <p style="margin-top:24px"><a class="btn-primary" href="https://github.com/predictboi/TOKEN/pull/3">PR #3에서 논의하기</a></p>
       </div>
     </div>
