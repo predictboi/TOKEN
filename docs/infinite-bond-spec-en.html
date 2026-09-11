@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>INFINITE BOND Specification</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
 <style>
@@ -28,6 +33,8 @@
   @media (max-width:700px) { .doc { padding:32px 18px 64px; } .toc ol { columns:1; } h1 { font-size:25px; } }
   @media print { .toc { break-inside:avoid; } h2 { break-after:avoid; } }
 </style>
+</head>
+<body>
 <div class="doc">
   <header>
     <div class="kicker">Product and engineering specification</div>
@@ -158,3 +165,5 @@ AAA ≥ 85 · AA ≥ 75 · A ≥ 65 · BBB ≥ 55 · BB ≥ 45 · B ≥ 35 · CC
 <div class="tw"><table><thead><tr><th>Term</th><th>Meaning</th></tr></thead><tbody><tr><td>Bond</td><td>Team's deposit in INF or JitoSOL; first loss on breach</td></tr><tr><td>Backing / <code>BKR</code></td><td>Senior deposits alongside the bond; tokenized as backing shares; loss capped at 30%</td></tr><tr><td>Capacity</td><td><code>B + 0.3K</code>; maximum coverage outstanding</td></tr><tr><td>Coverage / <code>CVR</code></td><td>Protection amount, tokenized per epoch; pays on breach to a wallet still holding the launch token</td></tr><tr><td>Sponsored coverage</td><td>Free coverage the team pre-funds; a non-transferable record</td></tr><tr><td>Covenant</td><td>A behavioral commitment the program verifies from accounts</td></tr><tr><td>Epoch</td><td>30-day settlement period; six per launch; may end early on breach</td></tr><tr><td>Utilization</td><td>Coverage outstanding ÷ capacity; sets the marginal rate</td></tr><tr><td>Escrow</td><td>Premiums held during an epoch to fund sell-backs; credited to the pool at settlement</td></tr><tr><td>Waterfall</td><td>Breach payout order: bond, then backing up to the cap; team remainder split fee / bonus</td></tr></tbody></table></div>
   <footer>INFINITE BOND · v3.2 · Source: docs/infinite-bond-spec-en.md</footer>
 </div>
+</body>
+</html>
