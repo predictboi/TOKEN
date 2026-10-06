@@ -1,0 +1,12 @@
+{
+  "name": "Polyquest",
+  "symbol": "USDP",
+  "description": "Polyquest USDP — collateral token used in Polyquest prediction markets.",
+  "image": "https://raw.githubusercontent.com/predictboi/token/main/usdp.png",
+  "properties": {
+    "files": [
+      { "uri": "https://raw.githubusercontent.com/predictboi/token/main/usdp.png", "type": "image/png" }
+    ],
+    "category": "image"
+  }
+}
