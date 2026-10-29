@@ -11,9 +11,17 @@ YouTube 링크 하나로 영상(mp4) 또는 음성(mp3)을 받는 간단한 커�
 ## 설치
 
 ```bash
-# Python 3.10 이상
+# Python 3.11 이상 (yt-dlp 요구사항)
 pip install -r requirements.txt
 ```
+
+> **macOS 주의**: 시스템 내장 `python3` 는 3.9 라서 설치가 실패합니다.
+> `brew install python@3.13` 후 가상환경을 쓰세요.
+>
+> ```bash
+> python3.13 -m venv .venv && source .venv/bin/activate
+> pip install -r requirements.txt
+> ```
 
 - **ffmpeg**: 최고 화질(영상+음성 분리 스트림 병합)과 mp3 변환에 필요합니다.
   PATH 에 ffmpeg 가 없으면 `imageio-ffmpeg` 가 번들한 바이너리를 자동으로 사용하므로 별도 설치 없이도 동작합니다.
