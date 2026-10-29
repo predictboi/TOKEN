@@ -65,10 +65,32 @@ python ytdl.py "https://youtu.be/9APZeLCZS3s" --cookies-from-browser chrome
 크롬이 실행 중이면 쿠키 DB 가 잠겨 읽기에 실패할 수 있으니, 그 경우 브라우저를 닫고 다시 시도하거나
 [쿠키 내보내기 확장](https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies) 으로 `cookies.txt` 를 만들어 `--cookies cookies.txt` 로 넘기세요.
 
+## 맥: 더블클릭 런처 (ytdl.command)
+
+터미널 명령을 매번 입력하지 않고 쓰는 방법입니다.
+
+1. Finder 로 `TOKEN` 폴더를 열고 `ytdl.command` 를 우클릭 > **별칭 만들기**
+2. 만들어진 별칭을 **바탕화면으로 드래그**
+3. 그 별칭을 더블클릭 > 터미널이 열림
+4. YouTube 링크를 붙여넣고 엔터 (여러 개는 띄어쓰기로 구분)
+5. 그냥 엔터를 누르면 종료, 저장 폴더가 Finder 로 열림
+
+반드시 **복사가 아니라 별칭**으로 만드세요. 복사하면 `ytdl.py` 를 찾지 못합니다.
+
+런처가 자동으로 처리하는 것:
+
+- `.venv` 가 있으면 자동 활성화
+- 설치된 브라우저를 감지해 chrome > firefox > brave > edge > safari 순으로 쿠키 재시도
+- 링크 뒤의 `?si=...` 추적 파라미터 제거
+
+처음 한 번은 "확인되지 않은 개발자" 경고가 뜰 수 있습니다.
+그 경우 우클릭 > **열기** 를 선택하면 이후부터는 그냥 더블클릭으로 열립니다.
+
 ## 파일 구조
 
 ```
 ytdl.py            다운로더 본체 (CLI + download() 함수)
+ytdl.command       맥 더블클릭 런처 (링크 붙여넣기 방식)
 requirements.txt   의존성
 downloads/         기본 저장 폴더 (git 에서 제외)
 ```
